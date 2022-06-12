@@ -3,16 +3,47 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        App\Entity\Assure:
+            algorithm: auto
+        App\Entity\User:
+            algorithm: auto
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Assure
+                property: email
+        app_user1_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+        app_users:
+            chain:
+                providers: ['app_user_provider', 'app_user1_provider']
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            lazy: true
-            provider: users_in_memory
+        login:
+            pattern: ^/cemedo/login
+            stateless: true
+            provider: app_users
+            json_login:
+                check_path: /cemedo/login_check # or api_login_check as defined in config/routes.yaml
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern:   ^/cemedo
+            stateless: true
+            provider: app_users
+            jwt: ~
+
+        #main:
+            #lazy: true
+            #provider: app_user_provider,app_user1_provider
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -23,8 +54,26 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/cemedo/login, roles: PUBLIC_ACCESS }
+        - { path: ^/cemedo/patients, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/cemedo/assurance, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/users, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/medecins, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/notifications, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/pharmaciens, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/rendez_vouses, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/services, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/type_fichier_medicals, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/type_services, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/dossier_medicals, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/infirmiers, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/fichier_medicals, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/administrateur, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/assures, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/cemedo,       roles: PUBLIC_ACCESS }
 
 when@test:
     security:
