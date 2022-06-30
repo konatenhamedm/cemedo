@@ -27,6 +27,16 @@ class Medicament
      */
     private $ordonnances;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantite;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $posologie;
+
     public function __construct()
     {
         $this->ordonnances = new ArrayCollection();
@@ -63,6 +73,30 @@ class Medicament
                 $ordonnance->setMedicament(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(int $quantite): self
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    public function getPosologie(): ?string
+    {
+        return $this->posologie;
+    }
+
+    public function setPosologie(string $posologie): self
+    {
+        $this->posologie = $posologie;
 
         return $this;
     }

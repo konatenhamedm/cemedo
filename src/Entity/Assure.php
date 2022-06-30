@@ -92,6 +92,51 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $rendezVouses;
 
+    /**
+     * @ORM\Column(type="string", length=12, nullable=true)
+     */
+    private $telephone1;
+
+    /**
+     * @ORM\Column(type="string", length=12, nullable=true)
+     */
+    private $telephone2;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $sexe;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fcmtoken;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateNaissance;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $tauxCouverture;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $autreAntecedent;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $numeroAssure;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lieuHabitation;
+
 
 
     public function __construct()
@@ -344,6 +389,114 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
                 $rendezVouse->setConcerne(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTelephone1(): ?string
+    {
+        return $this->telephone1;
+    }
+
+    public function setTelephone1(?string $telephone1): self
+    {
+        $this->telephone1 = $telephone1;
+
+        return $this;
+    }
+
+    public function getTelephone2(): ?string
+    {
+        return $this->telephone2;
+    }
+
+    public function setTelephone2(?string $telephone2): self
+    {
+        $this->telephone2 = $telephone2;
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(string $sexe): self
+    {
+        $this->sexe = $sexe;
+
+        return $this;
+    }
+
+    public function getFcmtoken(): ?string
+    {
+        return $this->fcmtoken;
+    }
+
+    public function setFcmtoken(string $fcmtoken): self
+    {
+        $this->fcmtoken = $fcmtoken;
+
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getTauxCouverture(): ?float
+    {
+        return $this->tauxCouverture;
+    }
+
+    public function setTauxCouverture(float $tauxCouverture): self
+    {
+        $this->tauxCouverture = $tauxCouverture;
+
+        return $this;
+    }
+
+    public function getAutreAntecedent(): ?string
+    {
+        return $this->autreAntecedent;
+    }
+
+    public function setAutreAntecedent(string $autreAntecedent): self
+    {
+        $this->autreAntecedent = $autreAntecedent;
+
+        return $this;
+    }
+
+    public function getNumeroAssure(): ?string
+    {
+        return $this->numeroAssure;
+    }
+
+    public function setNumeroAssure(string $numeroAssure): self
+    {
+        $this->numeroAssure = $numeroAssure;
+
+        return $this;
+    }
+
+    public function getLieuHabitation(): ?string
+    {
+        return $this->lieuHabitation;
+    }
+
+    public function setLieuHabitation(string $lieuHabitation): self
+    {
+        $this->lieuHabitation = $lieuHabitation;
 
         return $this;
     }

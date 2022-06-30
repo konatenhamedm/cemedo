@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PatientRepository;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,6 +41,7 @@ class Patient extends Assure
     private $numeroAssurance;
 
     /**
+     * @ApiSubresource()
      * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
      */
     private $membreFamilles;

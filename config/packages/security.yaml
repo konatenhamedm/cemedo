@@ -55,7 +55,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/cemedo/login, roles: PUBLIC_ACCESS }
-        - { path: ^/cemedo/patients, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/cemedo/patients, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/assurance, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/cemedo/users, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/cemedo/medecins, roles: IS_AUTHENTICATED_FULLY }
@@ -72,7 +72,8 @@ security:
         - { path: ^/cemedo/fichier_medicals, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/cemedo/administrateur, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/assures, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/cemedo/medicaments, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/assures, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo,       roles: PUBLIC_ACCESS }
 
 when@test:

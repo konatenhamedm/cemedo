@@ -22,7 +22,7 @@ class Notification
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $libelle;
+    private $body;
 
     /**
      * @ORM\Column(type="datetime")
@@ -34,19 +34,24 @@ class Notification
      */
     private $patient;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $statut;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getBody(): ?string
     {
-        return $this->libelle;
+        return $this->body;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setBody(string $body): self
     {
-        $this->libelle = $libelle;
+        $this->body = $body;
 
         return $this;
     }
@@ -71,6 +76,18 @@ class Notification
     public function setPatient(?Patient $patient): self
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }
