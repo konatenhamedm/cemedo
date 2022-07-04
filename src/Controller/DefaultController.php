@@ -18,4 +18,8 @@ class DefaultController
 
         return $data->getListe(2);
     }
+
+    public function api(){
+
+    }
 }
