@@ -20,30 +20,18 @@ class FichierMedical
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=DossierMedical::class, inversedBy="fichierMedicals")
-     */
-    private $dossier;
-
-    /**
      * @ORM\ManyToOne(targetEntity=TypeFichierMedical::class, inversedBy="fichierMedicals")
      */
     private $typeFichier;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="fichierMedicals")
+     */
+    private $dossierMedical;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDossier(): ?DossierMedical
-    {
-        return $this->dossier;
-    }
-
-    public function setDossier(?DossierMedical $dossier): self
-    {
-        $this->dossier = $dossier;
-
-        return $this;
     }
 
     public function getTypeFichier(): ?TypeFichierMedical
@@ -54,6 +42,18 @@ class FichierMedical
     public function setTypeFichier(?TypeFichierMedical $typeFichier): self
     {
         $this->typeFichier = $typeFichier;
+
+        return $this;
+    }
+
+    public function getDossierMedical(): ?Assure
+    {
+        return $this->dossierMedical;
+    }
+
+    public function setDossierMedical(?Assure $dossierMedical): self
+    {
+        $this->dossierMedical = $dossierMedical;
 
         return $this;
     }

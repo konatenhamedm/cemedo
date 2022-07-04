@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AssureRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,6 +13,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass=AssureRepository::class)
@@ -20,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "groups"= {"assures_read"}
  *          }
  * )
+ * @ApiFilter(SearchFilter::class,properties={"telephone1","telephone2"} )
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"assure" = "Assure", "patient" = "Patient","membre" = "MembreFamille"})
@@ -78,11 +81,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $ordonnances;
 
     /**
-     * @ORM\OneToMany(targetEntity=DossierMedical::class, mappedBy="assure")
-     */
-    private $dossierMedicals;
-
-    /**
      * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="emetteur")
      */
     private $rendezVousEmmetteur;
@@ -94,6 +92,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=12, nullable=true)
+     * @Groups({"assures_read"})
      */
     private $telephone1;
 
@@ -111,11 +110,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $fcmtoken;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateNaissance;
 
     /**
      * @ORM\Column(type="float")
@@ -137,6 +131,21 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $lieuHabitation;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FichierMedical::class, mappedBy="dossierMedical")
+     */
+    private $fichierMedicals;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Affection::class, mappedBy="antecedants")
+     */
+    private $affections;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateNaissance;
+
 
 
     public function __construct()
@@ -146,6 +155,8 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         $this->rendezVousEmmetteur = new ArrayCollection();
         $this->rendezVouses = new ArrayCollection();
         $this->roles [] ="ROLE_USER";
+        $this->fichierMedicals = new ArrayCollection();
+        $this->affections = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -304,36 +315,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, DossierMedical>
-     */
-    public function getDossierMedicals(): Collection
-    {
-        return $this->dossierMedicals;
-    }
-
-    public function addDossierMedical(DossierMedical $dossierMedical): self
-    {
-        if (!$this->dossierMedicals->contains($dossierMedical)) {
-            $this->dossierMedicals[] = $dossierMedical;
-            $dossierMedical->setAssure($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDossierMedical(DossierMedical $dossierMedical): self
-    {
-        if ($this->dossierMedicals->removeElement($dossierMedical)) {
-            // set the owning side to null (unless already changed)
-            if ($dossierMedical->getAssure() === $this) {
-                $dossierMedical->setAssure(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, RendezVous>
      */
     public function getRendezVousEmmetteur(): Collection
@@ -441,18 +422,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTimeInterface
-    {
-        return $this->dateNaissance;
-    }
-
-    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
-    {
-        $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
-
     public function getTauxCouverture(): ?float
     {
         return $this->tauxCouverture;
@@ -497,6 +466,78 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLieuHabitation(string $lieuHabitation): self
     {
         $this->lieuHabitation = $lieuHabitation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FichierMedical>
+     */
+    public function getFichierMedicals(): Collection
+    {
+        return $this->fichierMedicals;
+    }
+
+    public function addFichierMedical(FichierMedical $fichierMedical): self
+    {
+        if (!$this->fichierMedicals->contains($fichierMedical)) {
+            $this->fichierMedicals[] = $fichierMedical;
+            $fichierMedical->setDossierMedical($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFichierMedical(FichierMedical $fichierMedical): self
+    {
+        if ($this->fichierMedicals->removeElement($fichierMedical)) {
+            // set the owning side to null (unless already changed)
+            if ($fichierMedical->getDossierMedical() === $this) {
+                $fichierMedical->setDossierMedical(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Affection>
+     */
+    public function getAffections(): Collection
+    {
+        return $this->affections;
+    }
+
+    public function addAffection(Affection $affection): self
+    {
+        if (!$this->affections->contains($affection)) {
+            $this->affections[] = $affection;
+            $affection->setAntecedants($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAffection(Affection $affection): self
+    {
+        if ($this->affections->removeElement($affection)) {
+            // set the owning side to null (unless already changed)
+            if ($affection->getAntecedants() === $this) {
+                $affection->setAntecedants(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
 
         return $this;
     }

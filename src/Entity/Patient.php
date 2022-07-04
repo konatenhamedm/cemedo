@@ -35,12 +35,6 @@ class Patient extends Assure
     private $id;
 
     /**
-     * @Groups({"assures_read"})
-     * @ORM\Column(type="string", length=255)
-     */
-    private $numeroAssurance;
-
-    /**
      * @ApiSubresource()
      * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
      */
@@ -51,21 +45,30 @@ class Patient extends Assure
      */
     private $notifications;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $pieceIdRecto;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $pieceIdVerso;
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
+     */
+    private $assuranceRecto;
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
+     */
+    private $assuranceVerso;
+
     public function __construct()
     {
         $this->membreFamilles = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-    }
-    public function getNumeroAssurance(): ?string
-    {
-        return $this->numeroAssurance;
-    }
-
-    public function setNumeroAssurance(string $numeroAssurance): self
-    {
-        $this->numeroAssurance = $numeroAssurance;
-
-        return $this;
     }
 
     /**
@@ -124,6 +127,54 @@ class Patient extends Assure
                 $notification->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPieceIdRecto(): ?string
+    {
+        return $this->pieceIdRecto;
+    }
+
+    public function setPieceIdRecto(?string $pieceIdRecto): self
+    {
+        $this->pieceIdRecto = $pieceIdRecto;
+
+        return $this;
+    }
+
+    public function getPieceIdVerso(): ?string
+    {
+        return $this->pieceIdVerso;
+    }
+
+    public function setPieceIdVerso(?string $pieceIdVerso): self
+    {
+        $this->pieceIdVerso = $pieceIdVerso;
+
+        return $this;
+    }
+
+    public function getAssuranceRecto(): ?string
+    {
+        return $this->assuranceRecto;
+    }
+
+    public function setAssuranceRecto(string $assuranceRecto): self
+    {
+        $this->assuranceRecto = $assuranceRecto;
+
+        return $this;
+    }
+
+    public function getAssuranceVerso(): ?string
+    {
+        return $this->assuranceVerso;
+    }
+
+    public function setAssuranceVerso(string $assuranceVerso): self
+    {
+        $this->assuranceVerso = $assuranceVerso;
 
         return $this;
     }
