@@ -56,26 +56,26 @@ security:
     access_control:
        # - { path: ^/cemedo/login, roles: PUBLIC_ACCESS }
         - { path: ^/cemedo/patients, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/cemedo/assurance, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/users, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/medecins, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/notifications, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/pharmaciens, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/rendez_vouses, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/services, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/type_fichier_medicals, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/type_services, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/dossier_medicals, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/infirmiers, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/fichier_medicals, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/administrateur, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/cemedo/medicaments, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/assurance, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/medecins, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/notifications, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/pharmaciens, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/rendez_vouses, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/services, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/type_fichier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/type_services, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/dossier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/infirmiers, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/fichier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/administrateur, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/medicaments, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/assures, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo,       roles: PUBLIC_ACCESS }
-
+    #IS_AUTHENTICATED_FULLY
 when@test:
     security:
         password_hashers:
