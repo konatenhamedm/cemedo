@@ -19,7 +19,8 @@ class DefaultController
         return $data->getListe(2);
     }
 
-    public function api(){
-
+    public function api(): Response
+    {
+    return new Response();
     }
 }
