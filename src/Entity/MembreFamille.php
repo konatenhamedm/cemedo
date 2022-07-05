@@ -29,6 +29,11 @@ class MembreFamille extends Assure
      */
     private $patient;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $relation;
+
     public function getPatient(): ?Patient
     {
         return $this->patient;
@@ -37,6 +42,18 @@ class MembreFamille extends Assure
     public function setPatient(?Patient $patient): self
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getRelation(): ?string
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(string $relation): self
+    {
+        $this->relation = $relation;
 
         return $this;
     }

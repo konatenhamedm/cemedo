@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\FichierMedicalRepository;
+use App\Repository\LivraisonRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=FichierMedicalRepository::class)
+ * @ORM\Entity(repositoryClass=LivraisonRepository::class)
  */
-class FichierMedical
+class Livraison
 {
     /**
      * @ORM\Id
@@ -20,14 +20,19 @@ class FichierMedical
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=TypeFichierMedical::class, inversedBy="fichierMedicals")
+     * @ORM\Column(type="datetime")
      */
-    private $typeFichier;
+    private $dateLivraison;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="fichierMedicals")
+     * @ORM\Column(type="string", length=255)
      */
-    private $dossierMedical;
+    private $modePaiement;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $etat;
 
     /**
      * @ORM\Column(type="datetime")
@@ -97,31 +102,44 @@ class FichierMedical
 
         return $this;
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTypeFichier(): ?TypeFichierMedical
+    public function getDateLivraison(): ?\DateTimeInterface
     {
-        return $this->typeFichier;
+        return $this->dateLivraison;
     }
 
-    public function setTypeFichier(?TypeFichierMedical $typeFichier): self
+    public function setDateLivraison(\DateTimeInterface $dateLivraison): self
     {
-        $this->typeFichier = $typeFichier;
+        $this->dateLivraison = $dateLivraison;
 
         return $this;
     }
 
-    public function getDossierMedical(): ?Assure
+    public function getModePaiement(): ?string
     {
-        return $this->dossierMedical;
+        return $this->modePaiement;
     }
 
-    public function setDossierMedical(?Assure $dossierMedical): self
+    public function setModePaiement(string $modePaiement): self
     {
-        $this->dossierMedical = $dossierMedical;
+        $this->modePaiement = $modePaiement;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): self
+    {
+        $this->etat = $etat;
 
         return $this;
     }

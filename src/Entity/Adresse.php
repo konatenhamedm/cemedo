@@ -2,20 +2,17 @@
 
 namespace App\Entity;
 
-
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AssuranceRepository;
+use App\Repository\AdresseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=AssuranceRepository::class)
+ * @ORM\Entity(repositoryClass=AdresseRepository::class)
  */
-class Assurance
+class Adresse
 {
     /**
      * @ORM\Id
@@ -25,20 +22,24 @@ class Assurance
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Assure::class, mappedBy="assurance")
-     */
-    private $assures;
-
-    /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
      */
-    private $nomAssurance;
+    private $lat;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $emailAssurance;
+    private $longgitude;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="adresses")
+     */
+    private $assure;
+
+    /**
+     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="adresse")
+     */
+    private $rendezVouses;
 
     /**
      * @ORM\Column(type="datetime")
@@ -111,7 +112,7 @@ class Assurance
 
     public function __construct()
     {
-        $this->assures = new ArrayCollection();
+        $this->rendezVouses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,56 +120,68 @@ class Assurance
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Assure>
-     */
-    public function getAssures(): Collection
+    public function getLat(): ?string
     {
-        return $this->assures;
+        return $this->lat;
     }
 
-    public function addAssure(Assure $assure): self
+    public function setLat(string $lat): self
     {
-        if (!$this->assures->contains($assure)) {
-            $this->assures[] = $assure;
-            $assure->setAssurance($this);
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLonggitude(): ?string
+    {
+        return $this->longgitude;
+    }
+
+    public function setLonggitude(string $longgitude): self
+    {
+        $this->longgitude = $longgitude;
+
+        return $this;
+    }
+
+    public function getAssure(): ?Assure
+    {
+        return $this->assure;
+    }
+
+    public function setAssure(?Assure $assure): self
+    {
+        $this->assure = $assure;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RendezVous>
+     */
+    public function getRendezVouses(): Collection
+    {
+        return $this->rendezVouses;
+    }
+
+    public function addRendezVouse(RendezVous $rendezVouse): self
+    {
+        if (!$this->rendezVouses->contains($rendezVouse)) {
+            $this->rendezVouses[] = $rendezVouse;
+            $rendezVouse->setAdresse($this);
         }
 
         return $this;
     }
 
-    public function removeAssure(Assure $assure): self
+    public function removeRendezVouse(RendezVous $rendezVouse): self
     {
-        if ($this->assures->removeElement($assure)) {
+        if ($this->rendezVouses->removeElement($rendezVouse)) {
             // set the owning side to null (unless already changed)
-            if ($assure->getAssurance() === $this) {
-                $assure->setAssurance(null);
+            if ($rendezVouse->getAdresse() === $this) {
+                $rendezVouse->setAdresse(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getNomAssurance(): ?string
-    {
-        return $this->nomAssurance;
-    }
-
-    public function setNomAssurance(string $nomAssurance): self
-    {
-        $this->nomAssurance = $nomAssurance;
-
-        return $this;
-    }
-
-    public function getEmailAssurance(): ?string
-    {
-        return $this->emailAssurance;
-    }
-
-    public function setEmailAssurance(string $emailAssurance): self
-    {
-        $this->emailAssurance = $emailAssurance;
 
         return $this;
     }

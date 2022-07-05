@@ -86,6 +86,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $rendezVousEmmetteur;
 
     /**
+     * @Groups({"assures_read"})
      * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="concerne")
      */
     private $rendezVouses;
@@ -132,11 +133,13 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $lieuHabitation;
 
     /**
+     * @Groups({"assures_read"})
      * @ORM\OneToMany(targetEntity=FichierMedical::class, mappedBy="dossierMedical")
      */
     private $fichierMedicals;
 
     /**
+     * @Groups({"assures_read"})
      * @ORM\OneToMany(targetEntity=Affection::class, mappedBy="antecedants")
      */
     private $affections;
@@ -146,7 +149,89 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $dateNaissance;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PageCarnetSante::class, mappedBy="carnetSante")
+     */
+    private $pageCarnetSantes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="assure")
+     */
+    private $adresses;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $version;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="assure")
+     */
+    private $factures;
+
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): self
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
+    }
 
     public function __construct()
     {
@@ -157,6 +242,9 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles [] ="ROLE_USER";
         $this->fichierMedicals = new ArrayCollection();
         $this->affections = new ArrayCollection();
+        $this->pageCarnetSantes = new ArrayCollection();
+        $this->adresses = new ArrayCollection();
+        $this->factures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -538,6 +626,96 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PageCarnetSante>
+     */
+    public function getPageCarnetSantes(): Collection
+    {
+        return $this->pageCarnetSantes;
+    }
+
+    public function addPageCarnetSante(PageCarnetSante $pageCarnetSante): self
+    {
+        if (!$this->pageCarnetSantes->contains($pageCarnetSante)) {
+            $this->pageCarnetSantes[] = $pageCarnetSante;
+            $pageCarnetSante->setCarnetSante($this);
+        }
+
+        return $this;
+    }
+
+    public function removePageCarnetSante(PageCarnetSante $pageCarnetSante): self
+    {
+        if ($this->pageCarnetSantes->removeElement($pageCarnetSante)) {
+            // set the owning side to null (unless already changed)
+            if ($pageCarnetSante->getCarnetSante() === $this) {
+                $pageCarnetSante->setCarnetSante(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Adresse>
+     */
+    public function getAdresses(): Collection
+    {
+        return $this->adresses;
+    }
+
+    public function addAdress(Adresse $adress): self
+    {
+        if (!$this->adresses->contains($adress)) {
+            $this->adresses[] = $adress;
+            $adress->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdress(Adresse $adress): self
+    {
+        if ($this->adresses->removeElement($adress)) {
+            // set the owning side to null (unless already changed)
+            if ($adress->getAssure() === $this) {
+                $adress->setAssure(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Facture>
+     */
+    public function getFactures(): Collection
+    {
+        return $this->factures;
+    }
+
+    public function addFacture(Facture $facture): self
+    {
+        if (!$this->factures->contains($facture)) {
+            $this->factures[] = $facture;
+            $facture->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFacture(Facture $facture): self
+    {
+        if ($this->factures->removeElement($facture)) {
+            // set the owning side to null (unless already changed)
+            if ($facture->getAssure() === $this) {
+                $facture->setAssure(null);
+            }
+        }
 
         return $this;
     }
