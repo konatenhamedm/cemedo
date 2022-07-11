@@ -5,9 +5,13 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FactureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={
+ *      "groups"= {"facture_read"}
+ *          })
  * @ORM\Entity(repositoryClass=FactureRepository::class)
  */
 class Facture
@@ -26,11 +30,13 @@ class Facture
 
     /**
      * @ORM\Column(type="float")
+     *  @Groups({"assures_read","facture_read"})
      */
     private $montant;
 
     /**
      * @ORM\Column(type="datetime")
+     *  @Groups({"assures_read","facture_read"})
      */
     private $dateEmission;
 
@@ -51,11 +57,13 @@ class Facture
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read","facture_read"})
      */
     private $active;
 
     /**
      * @ORM\ManyToOne(targetEntity=Ordonnance::class, inversedBy="factures")
+     *  @Groups({"assures_read","facture_read"})
      */
     private $ordonnance;
 

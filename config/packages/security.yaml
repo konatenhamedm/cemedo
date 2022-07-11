@@ -14,11 +14,11 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\Assure
-                property: email
+                property: telephone1
         app_user1_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: telephone1
         app_users:
             chain:
                 providers: ['app_user_provider', 'app_user1_provider']
@@ -56,6 +56,8 @@ security:
     access_control:
        # - { path: ^/cemedo/login, roles: PUBLIC_ACCESS }
         - { path: ^/cemedo/patients, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/ordonnances, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/affections, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/cemedo/assurance, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/medecins, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -65,7 +67,7 @@ security:
         - { path: ^/cemedo/services, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/type_fichier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/type_services, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/cemedo/dossier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/infirmiers, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -33,6 +33,7 @@ class FamillePatientSubscriber implements EventSubscriberInterface
         $famille = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
+
         if ($famille instanceof MembreFamille && $method ==="POST"){
 
             $famille->setPatient($user);

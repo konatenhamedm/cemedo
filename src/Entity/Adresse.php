@@ -7,9 +7,14 @@ use App\Repository\AdresseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={
+ *      "groups"= {"adresse_read"}
+ *          }
+ * )
  * @ORM\Entity(repositoryClass=AdresseRepository::class)
  */
 class Adresse
@@ -23,10 +28,12 @@ class Adresse
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"assures_read"})
      */
     private $lat;
 
     /**
+     *  @Groups({"assures_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $longgitude;
@@ -43,6 +50,7 @@ class Adresse
 
     /**
      * @ORM\Column(type="datetime")
+     *  @Groups({"assures_read"})
      */
     private $createdAt;
 
@@ -58,6 +66,7 @@ class Adresse
 
     /**
      * @ORM\Column(type="boolean")
+     *  @Groups({"assures_read"})
      */
     private $active;
 

@@ -25,6 +25,6 @@
          $data['affections'] = $this->repository->findOneBySomeField($user);
          $data['status'] = 200;
          $event->setData($data);
-     /* dd($event->getData());*/
+      //dd($event->getData());
      }
  }

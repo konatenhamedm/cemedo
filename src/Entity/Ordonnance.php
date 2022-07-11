@@ -10,7 +10,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *          normalizationContext={
+ *      "groups"= {"ordonnance_read"}
+ *          }
+ * )
  * @ORM\Entity(repositoryClass=OrdonnanceRepository::class)
  */
 class Ordonnance
@@ -24,36 +28,43 @@ class Ordonnance
 
     /**
      * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="ordonnances")
+     * @Groups({"facture_read","ordonnance_read"})
      */
     private $assure;
 
     /**
      * @ORM\ManyToOne(targetEntity=Medicament::class, inversedBy="ordonnances")
+     * @Groups({"facture_read","ordonnance_read"})
      */
     private $medicament;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"facture_read","ordonnance_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"facture_read","ordonnance_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","ordonnance_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read","ordonnance_read"})
      */
     private $active;
 
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="ordonnance")
+     * @Groups({"ordonnance_read"})
      */
     private $factures;
 

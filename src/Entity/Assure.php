@@ -22,11 +22,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      "groups"= {"assures_read"}
  *          }
  * )
- * @ApiFilter(SearchFilter::class,properties={"telephone1","telephone2"} )
+ * @ApiFilter(SearchFilter::class,properties={"telephone1": "partial"} )
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"assure" = "Assure", "patient" = "Patient","membre" = "MembreFamille"})
- * @UniqueEntity("email",message="Un utilisateur ayant cette adresse email existe déja")
+ * @UniqueEntity("telephone1",message="Un utilisateur ayant cette adresse email existe déja")
  */
 class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -47,6 +47,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
+     *  @Groups({"assures_read"})
      */
     private $roles = [];
 
@@ -92,43 +93,51 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $rendezVouses;
 
     /**
-     * @ORM\Column(type="string", length=12, nullable=true)
+     * @ORM\Column(type="string", length=12,  unique=true)
      * @Groups({"assures_read"})
+     * @Assert\NotBlank(message="Nous avons besoin de votre email")
      */
     private $telephone1;
 
     /**
      * @ORM\Column(type="string", length=12, nullable=true)
+     * @Groups({"assures_read"})
      */
     private $telephone2;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $sexe;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $fcmtoken;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"assures_read"})
      */
     private $tauxCouverture;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $autreAntecedent;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $numeroAssure;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $lieuHabitation;
 
@@ -146,41 +155,49 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"assures_read"})
      */
     private $dateNaissance;
 
     /**
      * @ORM\OneToMany(targetEntity=PageCarnetSante::class, mappedBy="carnetSante")
+     * @Groups({"assures_read"})
      */
     private $pageCarnetSantes;
 
     /**
      * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="assure")
+     * @Groups({"assures_read"})
      */
     private $adresses;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read"})
      */
     private $active;
 
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="assure")
+     * @Groups({"assures_read"})
      */
     private $factures;
 
@@ -279,7 +296,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->telephone1;
     }
 
     /**

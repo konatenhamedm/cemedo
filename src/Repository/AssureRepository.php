@@ -71,13 +71,13 @@ class AssureRepository extends ServiceEntityRepository implements PasswordUpgrad
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Assure
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneBySomeField($value): ?Assure
+    {
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.telephone1 = :val')
+            ->setParameter('val', $value)
+           ->getQuery()
+            ->getOneOrNullResult()
+       ;
+   }
 }

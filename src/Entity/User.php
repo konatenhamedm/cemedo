@@ -33,9 +33,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"users_read","customers_read","invoices_read"})
      */
     private $id;
-
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=12,  unique=true)
+     * @Groups({"users_read"})
+     * @Assert\NotBlank(message="Nous avons besoin de votre email")
+     *
+     */
+    private $telephone1;
+    /**
+     * @ORM\Column(type="string", length=180,  unique=true)
      * @Groups({"users_read","customers_read","invoices_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
@@ -108,7 +114,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getTelephone1(): ?string
+    {
+        return $this->telephone1;
+    }
 
+    public function setTelephone1(?string $telephone1): self
+    {
+        $this->telephone1 = $telephone1;
+
+        return $this;
+    }
     public function getVersion(): ?int
     {
         return $this->version;
@@ -162,7 +178,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->telephone1;
     }
 
     /**
@@ -170,7 +186,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->telephone1;
     }
 
     /**
