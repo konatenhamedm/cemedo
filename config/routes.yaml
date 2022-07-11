@@ -4,5 +4,5 @@
 
 api_login_check:
   path: /cemedo/login
- # methods: ['POST']
+  methods: ['POST']
   #controller: App\Controller\DefaultController::api
