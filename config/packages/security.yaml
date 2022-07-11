@@ -32,32 +32,37 @@ security:
             stateless: true
             provider: app_users
             json_login:
-                check_path: /cemedo/login_check # or api_login_check as defined in config/routes.yaml
+                check_path: /cemedo/login # or api_login_check as defined in config/routes.yaml
+                username_path: username
+                password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         api:
-            pattern:   ^/cemedo
+            pattern: ^/cemedo/
             stateless: true
             provider: app_users
-            jwt: ~
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
-        #main:
-            #lazy: true
-            #provider: app_user_provider,app_user1_provider
+                #main:
+                    #anonymous: lazy
+                    #provider: app_users
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+                # activate different ways to authenticate
+                # https://symfony.com/doc/current/security.html#the-firewall
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+                # https://symfony.com/doc/current/security/impersonating_user.html
+                # switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-       # - { path: ^/cemedo/login, roles: PUBLIC_ACCESS }
+        # - { path: ^/cemedo/login, roles: PUBLIC_ACCESS }
         - { path: ^/cemedo/patients, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/ordonnances, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/cemedo/affections, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/affections, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/cemedo/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/assurance, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/medecins, roles: IS_AUTHENTICATED_ANONYMOUSLY }
