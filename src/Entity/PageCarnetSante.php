@@ -24,10 +24,6 @@ class PageCarnetSante
      */
     private $lienFichier;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="pageCarnetSantes")
-     */
-    private $carnetSante;
 
     /**
      * @ORM\Column(type="datetime")
@@ -49,6 +45,11 @@ class PageCarnetSante
      */
     private $active;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="carnetSante")
+     */
+    private $assure;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -66,17 +67,7 @@ class PageCarnetSante
         return $this;
     }
 
-    public function getCarnetSante(): ?Assure
-    {
-        return $this->carnetSante;
-    }
 
-    public function setCarnetSante(?Assure $carnetSante): self
-    {
-        $this->carnetSante = $carnetSante;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -122,6 +113,18 @@ class PageCarnetSante
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getAssure(): ?Assure
+    {
+        return $this->assure;
+    }
+
+    public function setAssure(?Assure $assure): self
+    {
+        $this->assure = $assure;
 
         return $this;
     }

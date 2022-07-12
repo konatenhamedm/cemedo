@@ -68,6 +68,12 @@ class Ordonnance
      */
     private $factures;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read","ordonnance_read"})
+     */
+    private $libelle;
+
     public function __construct()
     {
         $this->factures = new ArrayCollection();
@@ -177,6 +183,18 @@ class Ordonnance
                 $facture->setOrdonnance(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

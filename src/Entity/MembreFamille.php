@@ -27,7 +27,7 @@ class MembreFamille extends Assure
     /**
      * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="membreFamilles")
      */
-    private $patient;
+    private $assure;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -36,12 +36,12 @@ class MembreFamille extends Assure
 
     public function getPatient(): ?Patient
     {
-        return $this->patient;
+        return $this->assure;
     }
 
     public function setPatient(?Patient $patient): self
     {
-        $this->patient = $patient;
+        $this->assure = $patient;
 
         return $this;
     }

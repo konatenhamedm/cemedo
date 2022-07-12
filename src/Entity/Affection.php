@@ -26,10 +26,6 @@ class Affection
      */
     private $value;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="affections")
-     */
-    private $antecedants;
 
     /**
      * @ORM\Column(type="datetime")
@@ -54,6 +50,23 @@ class Affection
      *  @Groups({"assures_read"})
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *  @Groups({"assures_read"})
+     */
+    private $cle;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="antecedants")
+     */
+    private $assure;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *  @Groups({"assures_read"})
+     */
+    private $libelle;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -121,14 +134,38 @@ class Affection
         return $this;
     }
 
-    public function getAntecedants(): ?Assure
+    public function getCle(): ?string
     {
-        return $this->antecedants;
+        return $this->cle;
     }
 
-    public function setAntecedants(?Assure $antecedants): self
+    public function setCle(string $cle): self
     {
-        $this->antecedants = $antecedants;
+        $this->cle = $cle;
+
+        return $this;
+    }
+
+    public function getAssure(): ?Assure
+    {
+        return $this->assure;
+    }
+
+    public function setAssure(?Assure $assure): self
+    {
+        $this->assure = $assure;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

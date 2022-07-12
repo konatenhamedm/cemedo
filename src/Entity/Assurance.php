@@ -12,7 +12,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *    normalizationContext={
+ *      "groups"= {"assurance_read"}
+ *          }
+ * )
  * @ORM\Entity(repositoryClass=AssuranceRepository::class)
  */
 class Assurance
@@ -31,34 +35,39 @@ class Assurance
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
-     */
-    private $nomAssurance;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read","assurance_read"})
      */
     private $emailAssurance;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read","assurance_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read","assurance_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","assurance_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read","assurance_read"})
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read","assurance_read"})
+     */
+    private $libelle;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -149,18 +158,6 @@ class Assurance
         return $this;
     }
 
-    public function getNomAssurance(): ?string
-    {
-        return $this->nomAssurance;
-    }
-
-    public function setNomAssurance(string $nomAssurance): self
-    {
-        $this->nomAssurance = $nomAssurance;
-
-        return $this;
-    }
-
     public function getEmailAssurance(): ?string
     {
         return $this->emailAssurance;
@@ -169,6 +166,18 @@ class Assurance
     public function setEmailAssurance(string $emailAssurance): self
     {
         $this->emailAssurance = $emailAssurance;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

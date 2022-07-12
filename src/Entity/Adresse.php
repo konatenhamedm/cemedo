@@ -70,6 +70,11 @@ class Adresse
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -191,6 +196,18 @@ class Adresse
                 $rendezVouse->setAdresse(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

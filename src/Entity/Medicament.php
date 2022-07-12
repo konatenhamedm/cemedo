@@ -57,6 +57,11 @@ class Medicament
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -166,6 +171,18 @@ class Medicament
     public function setPosologie(string $posologie): self
     {
         $this->posologie = $posologie;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RendezVousRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +25,6 @@ class RendezVous
      * @ORM\ManyToOne(targetEntity=Gerant::class, inversedBy="rendezVouses")
      */
     private $gerant;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="rendezVousEmmetteur")
-     */
-    private $emetteur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="rendezVouses")
@@ -68,6 +65,16 @@ class RendezVous
      * @ORM\Column(type="boolean")
      */
     private $active;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Patient::class, mappedBy="rendezVous")
+     */
+    private $emetteur;
+
+    public function __construct()
+    {
+        $this->emetteur = new ArrayCollection();
+    }
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -135,17 +142,6 @@ class RendezVous
         return $this;
     }
 
-    public function getEmetteur(): ?Assure
-    {
-        return $this->emetteur;
-    }
-
-    public function setEmetteur(?Assure $emetteur): self
-    {
-        $this->emetteur = $emetteur;
-
-        return $this;
-    }
 
     public function getConcerne(): ?Assure
     {
@@ -191,6 +187,36 @@ class RendezVous
     public function setAdresse(?Adresse $adresse): self
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Patient>
+     */
+    public function getEmetteur(): Collection
+    {
+        return $this->emetteur;
+    }
+
+    public function addEmetteur(Patient $emetteur): self
+    {
+        if (!$this->emetteur->contains($emetteur)) {
+            $this->emetteur[] = $emetteur;
+            $emetteur->setRendezVous($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmetteur(Patient $emetteur): self
+    {
+        if ($this->emetteur->removeElement($emetteur)) {
+            // set the owning side to null (unless already changed)
+            if ($emetteur->getRendezVous() === $this) {
+                $emetteur->setRendezVous(null);
+            }
+        }
 
         return $this;
     }

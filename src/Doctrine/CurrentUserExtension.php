@@ -32,25 +32,14 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface,QueryIte
     private function addWhere(QueryBuilder $queryBuilder,string $resourceClass){
         $user = $this->security->getUser();
 
-        if (($resourceClass === Affection::class || $resourceClass === Ordonnance::class) && !$this->auth->isGranted("ROLE_ADMIN")){
+        if (($resourceClass === PageCarnetSante::class || $resourceClass === FichierMedical::class
+                || $resourceClass === MembreFamille::class || $resourceClass === Notification::class
+                ||  $resourceClass === Adresse::class || $resourceClass === Affection::class
+                || $resourceClass === Ordonnance::class) && !$this->auth->isGranted("ROLE_ADMIN")){
 
             $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere("$rootAlias.assure = :user");
 
-            if ($resourceClass === Affection::class){
-                $queryBuilder->andWhere("$rootAlias.antecedants = :user");
-
-            }elseif ($resourceClass === Ordonnance::class || $resourceClass === Adresse::class || $resourceClass === Facture::class){
-                $queryBuilder->andWhere("$rootAlias.assure = :user");
-            }
-            elseif ($resourceClass === MembreFamille::class || $resourceClass === Notification::class){
-                $queryBuilder->andWhere("$rootAlias.patient = :user");
-            }
-            elseif ($resourceClass === FichierMedical::class){
-                $queryBuilder->andWhere("$rootAlias.dossierMedical = :user");
-            }
-            elseif ($resourceClass === PageCarnetSante::class){
-                $queryBuilder->andWhere("$rootAlias.carnetSante = :user");
-            }
             $queryBuilder->setParameter("user",$user);
 
             /* dd($queryBuilder);*/

@@ -24,6 +24,11 @@ class Medecin extends User
      */
     private $rendezVouses;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TypeMedecin::class, inversedBy="medecins")
+     */
+    private $typeMedecin;
+
     public function __construct()
     {
         $this->rendezVouses = new ArrayCollection();
@@ -68,6 +73,18 @@ class Medecin extends User
                 $rendezVouse->setMedecin(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTypeMedecin(): ?TypeMedecin
+    {
+        return $this->typeMedecin;
+    }
+
+    public function setTypeMedecin(?TypeMedecin $typeMedecin): self
+    {
+        $this->typeMedecin = $typeMedecin;
 
         return $this;
     }

@@ -61,13 +61,13 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups({"users_read","customers_read","invoices_read"})
      */
-    private $firstName;
+    private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"assures_read"})
      */
-    private $lastName;
+    private $prenoms;
 
     /**
      * @Groups({"assures_read"})
@@ -80,11 +80,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Ordonnance::class, mappedBy="assure")
      */
     private $ordonnances;
-
-    /**
-     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="emetteur")
-     */
-    private $rendezVousEmmetteur;
 
     /**
      * @Groups({"assures_read"})
@@ -141,29 +136,12 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $lieuHabitation;
 
-    /**
-     * @Groups({"assures_read"})
-     * @ORM\OneToMany(targetEntity=FichierMedical::class, mappedBy="dossierMedical")
-     */
-    private $fichierMedicals;
-
-    /**
-     * @Groups({"assures_read"})
-     * @ORM\OneToMany(targetEntity=Affection::class, mappedBy="antecedants")
-     */
-    private $affections;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"assures_read"})
      */
     private $dateNaissance;
-
-    /**
-     * @ORM\OneToMany(targetEntity=PageCarnetSante::class, mappedBy="carnetSante")
-     * @Groups({"assures_read"})
-     */
-    private $pageCarnetSantes;
 
     /**
      * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="assure")
@@ -200,6 +178,24 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"assures_read"})
      */
     private $factures;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PageCarnetSante::class, mappedBy="assure")
+     * @Groups({"assures_read"})
+     */
+    private $carnetSante;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Affection::class, mappedBy="assure")
+     * @Groups({"assures_read"})
+     */
+    private $antecedants;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FichierMedical::class, mappedBy="assure")
+     * @Groups({"assures_read"})
+     */
+    private $dossierMedical;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -257,11 +253,11 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         $this->rendezVousEmmetteur = new ArrayCollection();
         $this->rendezVouses = new ArrayCollection();
         $this->roles [] ="ROLE_USER";
-        $this->fichierMedicals = new ArrayCollection();
-        $this->affections = new ArrayCollection();
-        $this->pageCarnetSantes = new ArrayCollection();
         $this->adresses = new ArrayCollection();
         $this->factures = new ArrayCollection();
+        $this->carnetSante = new ArrayCollection();
+        $this->antecedants = new ArrayCollection();
+        $this->dossierMedical = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -353,26 +349,26 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstName(): ?string
+    public function getNom(): ?string
     {
-        return $this->firstName;
+        return $this->nom;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setNom(string $nom): self
     {
-        $this->firstName = $firstName;
+        $this->nom = $nom;
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function getPrenoms(): ?string
     {
-        return $this->lastName;
+        return $this->prenoms;
     }
 
-    public function setLastName(string $lastName): self
+    public function setPrenoms(string $prenoms): self
     {
-        $this->lastName = $lastName;
+        $this->prenoms = $prenoms;
 
         return $this;
     }
@@ -419,35 +415,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, RendezVous>
-     */
-    public function getRendezVousEmmetteur(): Collection
-    {
-        return $this->rendezVousEmmetteur;
-    }
-
-    public function addRendezVousEmmetteur(RendezVous $rendezVousEmmetteur): self
-    {
-        if (!$this->rendezVousEmmetteur->contains($rendezVousEmmetteur)) {
-            $this->rendezVousEmmetteur[] = $rendezVousEmmetteur;
-            $rendezVousEmmetteur->setEmetteur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRendezVousEmmetteur(RendezVous $rendezVousEmmetteur): self
-    {
-        if ($this->rendezVousEmmetteur->removeElement($rendezVousEmmetteur)) {
-            // set the owning side to null (unless already changed)
-            if ($rendezVousEmmetteur->getEmetteur() === $this) {
-                $rendezVousEmmetteur->setEmetteur(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, RendezVous>
@@ -575,66 +542,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, FichierMedical>
-     */
-    public function getFichierMedicals(): Collection
-    {
-        return $this->fichierMedicals;
-    }
-
-    public function addFichierMedical(FichierMedical $fichierMedical): self
-    {
-        if (!$this->fichierMedicals->contains($fichierMedical)) {
-            $this->fichierMedicals[] = $fichierMedical;
-            $fichierMedical->setDossierMedical($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFichierMedical(FichierMedical $fichierMedical): self
-    {
-        if ($this->fichierMedicals->removeElement($fichierMedical)) {
-            // set the owning side to null (unless already changed)
-            if ($fichierMedical->getDossierMedical() === $this) {
-                $fichierMedical->setDossierMedical(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Affection>
-     */
-    public function getAffections(): Collection
-    {
-        return $this->affections;
-    }
-
-    public function addAffection(Affection $affection): self
-    {
-        if (!$this->affections->contains($affection)) {
-            $this->affections[] = $affection;
-            $affection->setAntecedants($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAffection(Affection $affection): self
-    {
-        if ($this->affections->removeElement($affection)) {
-            // set the owning side to null (unless already changed)
-            if ($affection->getAntecedants() === $this) {
-                $affection->setAntecedants(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getDateNaissance(): ?\DateTimeInterface
     {
         return $this->dateNaissance;
@@ -643,36 +550,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, PageCarnetSante>
-     */
-    public function getPageCarnetSantes(): Collection
-    {
-        return $this->pageCarnetSantes;
-    }
-
-    public function addPageCarnetSante(PageCarnetSante $pageCarnetSante): self
-    {
-        if (!$this->pageCarnetSantes->contains($pageCarnetSante)) {
-            $this->pageCarnetSantes[] = $pageCarnetSante;
-            $pageCarnetSante->setCarnetSante($this);
-        }
-
-        return $this;
-    }
-
-    public function removePageCarnetSante(PageCarnetSante $pageCarnetSante): self
-    {
-        if ($this->pageCarnetSantes->removeElement($pageCarnetSante)) {
-            // set the owning side to null (unless already changed)
-            if ($pageCarnetSante->getCarnetSante() === $this) {
-                $pageCarnetSante->setCarnetSante(null);
-            }
-        }
 
         return $this;
     }
@@ -731,6 +608,96 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($facture->getAssure() === $this) {
                 $facture->setAssure(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PageCarnetSante>
+     */
+    public function getCarnetSante(): Collection
+    {
+        return $this->carnetSante;
+    }
+
+    public function addCarnetSante(PageCarnetSante $carnetSante): self
+    {
+        if (!$this->carnetSante->contains($carnetSante)) {
+            $this->carnetSante[] = $carnetSante;
+            $carnetSante->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCarnetSante(PageCarnetSante $carnetSante): self
+    {
+        if ($this->carnetSante->removeElement($carnetSante)) {
+            // set the owning side to null (unless already changed)
+            if ($carnetSante->getAssure() === $this) {
+                $carnetSante->setAssure(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Affection>
+     */
+    public function getAntecedants(): Collection
+    {
+        return $this->antecedants;
+    }
+
+    public function addAntecedant(Affection $antecedant): self
+    {
+        if (!$this->antecedants->contains($antecedant)) {
+            $this->antecedants[] = $antecedant;
+            $antecedant->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAntecedant(Affection $antecedant): self
+    {
+        if ($this->antecedants->removeElement($antecedant)) {
+            // set the owning side to null (unless already changed)
+            if ($antecedant->getAssure() === $this) {
+                $antecedant->setAssure(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FichierMedical>
+     */
+    public function getDossierMedical(): Collection
+    {
+        return $this->dossierMedical;
+    }
+
+    public function addDossierMedical(FichierMedical $dossierMedical): self
+    {
+        if (!$this->dossierMedical->contains($dossierMedical)) {
+            $this->dossierMedical[] = $dossierMedical;
+            $dossierMedical->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDossierMedical(FichierMedical $dossierMedical): self
+    {
+        if ($this->dossierMedical->removeElement($dossierMedical)) {
+            // set the owning side to null (unless already changed)
+            if ($dossierMedical->getAssure() === $this) {
+                $dossierMedical->setAssure(null);
             }
         }
 

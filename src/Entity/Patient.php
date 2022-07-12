@@ -38,7 +38,7 @@ class Patient extends Assure
      * @ApiSubresource()
      * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
      */
-    private $membreFamilles;
+    private $membresFamille;
 
     /**
      * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="patient")
@@ -65,24 +65,29 @@ class Patient extends Assure
      */
     private $assuranceVerso;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=RendezVous::class, inversedBy="emetteur")
+     */
+    private $rendezVous;
+
     public function __construct()
     {
-        $this->membreFamilles = new ArrayCollection();
+        $this->membresFamille = new ArrayCollection();
         $this->notifications = new ArrayCollection();
     }
 
     /**
      * @return Collection<int, MembreFamille>
      */
-    public function getMembreFamilles(): Collection
+    public function getMembresFamille(): Collection
     {
-        return $this->membreFamilles;
+        return $this->membresFamille;
     }
 
     public function addMembreFamille(MembreFamille $membreFamille): self
     {
-        if (!$this->membreFamilles->contains($membreFamille)) {
-            $this->membreFamilles[] = $membreFamille;
+        if (!$this->membresFamille->contains($membreFamille)) {
+            $this->membresFamille[] = $membreFamille;
             $membreFamille->setPatient($this);
         }
 
@@ -91,7 +96,7 @@ class Patient extends Assure
 
     public function removeMembreFamille(MembreFamille $membreFamille): self
     {
-        if ($this->membreFamilles->removeElement($membreFamille)) {
+        if ($this->membresFamille->removeElement($membreFamille)) {
             // set the owning side to null (unless already changed)
             if ($membreFamille->getPatient() === $this) {
                 $membreFamille->setPatient(null);
@@ -175,6 +180,18 @@ class Patient extends Assure
     public function setAssuranceVerso(string $assuranceVerso): self
     {
         $this->assuranceVerso = $assuranceVerso;
+
+        return $this;
+    }
+
+    public function getRendezVous(): ?RendezVous
+    {
+        return $this->rendezVous;
+    }
+
+    public function setRendezVous(?RendezVous $rendezVous): self
+    {
+        $this->rendezVous = $rendezVous;
 
         return $this;
     }

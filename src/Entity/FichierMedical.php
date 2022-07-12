@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FichierMedicalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -21,33 +22,45 @@ class FichierMedical
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeFichierMedical::class, inversedBy="fichierMedicals")
+     *  @Groups({"assures_read"})
      */
     private $typeFichier;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="fichierMedicals")
-     */
-    private $dossierMedical;
 
     /**
      * @ORM\Column(type="datetime")
+     *  @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     *  @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     *  @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     *  @Groups({"assures_read"})
      */
     private $active;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="dossierMedical")
+     */
+    private $assure;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *  @Groups({"assures_read"})
+     */
+    private $libelle;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -114,15 +127,28 @@ class FichierMedical
         return $this;
     }
 
-    public function getDossierMedical(): ?Assure
+    public function getAssure(): ?Assure
     {
-        return $this->dossierMedical;
+        return $this->assure;
     }
 
-    public function setDossierMedical(?Assure $dossierMedical): self
+    public function setAssure(?Assure $assure): self
     {
-        $this->dossierMedical = $dossierMedical;
+        $this->assure = $assure;
 
         return $this;
     }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
 }
