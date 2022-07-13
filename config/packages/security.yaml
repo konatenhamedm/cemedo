@@ -14,11 +14,11 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\Assure
-                property: telephone1
+                property: tel
         app_user1_provider:
             entity:
                 class: App\Entity\User
-                property: telephone1
+                property: tel
         app_users:
             chain:
                 providers: ['app_user_provider', 'app_user1_provider']

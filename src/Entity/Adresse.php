@@ -36,7 +36,7 @@ class Adresse
      *  @Groups({"assures_read"})
      * @ORM\Column(type="string", length=255)
      */
-    private $longgitude;
+    private $longitude;
 
     /**
      * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="adresses")
@@ -56,6 +56,7 @@ class Adresse
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
@@ -146,14 +147,14 @@ class Adresse
         return $this;
     }
 
-    public function getLonggitude(): ?string
+    public function getLongitude(): ?string
     {
-        return $this->longgitude;
+        return $this->longitude;
     }
 
-    public function setLonggitude(string $longgitude): self
+    public function setLongitude(string $longitude): self
     {
-        $this->longgitude = $longgitude;
+        $this->longitude = $longitude;
 
         return $this;
     }

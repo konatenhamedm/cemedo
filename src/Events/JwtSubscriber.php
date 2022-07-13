@@ -14,7 +14,7 @@
 
          $data['nom'] = $user->getNom();
          $data['prenoms'] = $user->getPrenoms();
-         $data['telephone1'] = $user->getTelephone1();
+         $data['tel'] = $user->getTel();
          $data['lieuHabitation'] = $user->getLieuHabitation();
          $data['fcmtoken'] = $user->getFcmtoken();
          $data['status'] = 200;

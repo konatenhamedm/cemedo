@@ -7,25 +7,33 @@ use App\Repository\MedecinRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *       normalizationContext={
+ *      "groups"= {"medecins_read"}
+ *          }
+ * )
  * @ORM\Entity(repositoryClass=MedecinRepository::class)
  */
 class Medecin extends User
 {
     /**
      * @ORM\Column(type="float")
+     *  @Groups({"medecins_read"})
      */
     private $salaireMedecin;
 
     /**
      * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="medecin")
+     * @Groups({"medecins_read"})
      */
     private $rendezVouses;
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeMedecin::class, inversedBy="medecins")
+     * @Groups({"medecins_read"})
      */
     private $typeMedecin;
 

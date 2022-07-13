@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"user" = "User", "medecin" = "Medecin","administrateur" = "Administrateur",
  *     "infirmier" = "Infirmier","pharmacien" = "Pharmacien","gerant" = "Gerant"})
- * @UniqueEntity("email",message="Un utilisateur ayant cette adresse email existe déja")
+ * @UniqueEntity("tel",message="Un utilisateur ayant ce numero de telephone existe déja")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -30,25 +30,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"users_read","customers_read","invoices_read"})
+     * @Groups({"users_read"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=12,  unique=true)
      * @Groups({"users_read"})
-     * @Assert\NotBlank(message="Nous avons besoin de votre email")
+     * @Assert\NotBlank(message="Nous avons besoin de votre numero de telephone")
      *
      */
-    private $telephone1;
+    private $tel;
     /**
-     * @ORM\Column(type="string", length=180,  unique=true)
-     * @Groups({"users_read","customers_read","invoices_read"})
+     * @ORM\Column(type="string", length=180)
+     * @Groups({"users_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users_read"})
      */
     private $roles = [];
 
@@ -60,15 +61,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","customers_read","invoices_read"})
+     * @Groups({"users_read"})
      */
-    private $firstName;
+    private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","customers_read","invoices_read"})
+     * @Groups({"users_read"})
      */
-    private $lastName;
+    private $prenoms;
 
     /**
      * @ORM\Column(type="datetime")
@@ -114,14 +115,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    public function getTelephone1(): ?string
+    public function getTel(): ?string
     {
-        return $this->telephone1;
+        return $this->tel;
     }
 
-    public function setTelephone1(?string $telephone1): self
+    public function setTel(?string $tel): self
     {
-        $this->telephone1 = $telephone1;
+        $this->tel = $tel;
 
         return $this;
     }
@@ -151,7 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->roles [] ="ROLE_USER";
+        //$this->roles [] ="ROLE_USER";
     }
 
     public function getId(): ?int
@@ -178,7 +179,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->telephone1;
+        return (string) $this->tel;
     }
 
     /**
@@ -186,7 +187,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->telephone1;
+        return (string) $this->tel;
     }
 
     /**
@@ -196,9 +197,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        //$roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return $roles;
     }
 
     public function setRoles(array $roles): self
@@ -243,26 +244,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstName(): ?string
+    public function getNom(): ?string
     {
-        return $this->firstName;
+        return $this->nom;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setNom(string $nom): self
     {
-        $this->firstName = $firstName;
+        $this->nom = $nom;
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function getPrenoms(): ?string
     {
-        return $this->lastName;
+        return $this->prenoms;
     }
 
-    public function setLastName(string $lastName): self
+    public function setPrenoms(string $prenoms): self
     {
-        $this->lastName = $lastName;
+        $this->prenoms = $prenoms;
 
         return $this;
     }

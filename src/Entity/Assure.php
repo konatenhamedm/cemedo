@@ -22,11 +22,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      "groups"= {"assures_read"}
  *          }
  * )
- * @ApiFilter(SearchFilter::class,properties={"telephone1": "partial"} )
+ * @ApiFilter(SearchFilter::class,properties={"tel": "partial"} )
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"assure" = "Assure", "patient" = "Patient","membre" = "MembreFamille"})
- * @UniqueEntity("telephone1",message="Un utilisateur ayant cette adresse email existe déja")
+ * @UniqueEntity("tel",message="Un utilisateur ayant ce numéro de téléphone existe déja")
  */
 class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -39,7 +39,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180)
      * @Groups({"assures_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
@@ -92,13 +92,13 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"assures_read"})
      * @Assert\NotBlank(message="Nous avons besoin de votre email")
      */
-    private $telephone1;
+    private $tel;
 
     /**
      * @ORM\Column(type="string", length=12, nullable=true)
      * @Groups({"assures_read"})
      */
-    private $telephone2;
+    private $tel2;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -252,7 +252,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         $this->dossierMedicals = new ArrayCollection();
         $this->rendezVousEmmetteur = new ArrayCollection();
         $this->rendezVouses = new ArrayCollection();
-        $this->roles [] ="ROLE_USER";
+       // $this->roles [] ="ROLE_USER";
         $this->adresses = new ArrayCollection();
         $this->factures = new ArrayCollection();
         $this->carnetSante = new ArrayCollection();
@@ -284,7 +284,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->tel;
     }
 
     /**
@@ -292,7 +292,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->telephone1;
+        return (string) $this->tel;
     }
 
     /**
@@ -302,9 +302,9 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+       // $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return $roles;
     }
 
     public function setRoles(array $roles): self
@@ -446,26 +446,26 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTelephone1(): ?string
+    public function getTel(): ?string
     {
-        return $this->telephone1;
+        return $this->tel;
     }
 
-    public function setTelephone1(?string $telephone1): self
+    public function setTel(?string $tel): self
     {
-        $this->telephone1 = $telephone1;
+        $this->tel = $tel;
 
         return $this;
     }
 
-    public function getTelephone2(): ?string
+    public function getTel2(): ?string
     {
-        return $this->telephone2;
+        return $this->tel2;
     }
 
-    public function setTelephone2(?string $telephone2): self
+    public function setTel2(?string $tel2): self
     {
-        $this->telephone2 = $telephone2;
+        $this->tel2 = $tel2;
 
         return $this;
     }
