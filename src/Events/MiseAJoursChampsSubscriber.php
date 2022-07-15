@@ -6,6 +6,7 @@ namespace App\Events;
 
 
 use ApiPlatform\Core\EventListener\EventPriorities;
+use App\Entity\Media;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -31,14 +32,17 @@ class MiseAJoursChampsSubscriber implements EventSubscriberInterface
         $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if ($method ==="POST"){
-            $entity->setCreatedAt(new \DateTime('now'));
-            $entity->setActive(true);
-            $entity->setVersion($increment);
-        }elseif ($method ==="PUT"){
-            $entity->setUpdatedAt(new \DateTime('now'));
-            $entity->setVersion($entity->getVersion()+1);
-        }
+            if ($method ==="POST"){
+                $entity->setCreatedAt(new \DateTime('now'));
+                $entity->setUpdatedAt(new \DateTime('now'));
+                $entity->setActive(true);
+                $entity->setVersion($increment);
+            }elseif ($method ==="PUT"){
+                $entity->setUpdatedAt(new \DateTime('now'));
+                $entity->setVersion($entity->getVersion()+1);
+            }
+
+
 
     }
 }

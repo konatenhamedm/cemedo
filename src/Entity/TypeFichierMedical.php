@@ -7,6 +7,7 @@ use App\Repository\TypeFichierMedicalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,11 +19,13 @@ class TypeFichierMedical
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $libelle;
 
@@ -33,21 +36,25 @@ class TypeFichierMedical
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read"})
      */
     private $active;
 

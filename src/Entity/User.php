@@ -30,26 +30,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"users_read"})
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=12,  unique=true)
-     * @Groups({"users_read"})
+     * @Groups({"users_read","medecins_read","assures_read"})
      * @Assert\NotBlank(message="Nous avons besoin de votre numero de telephone")
      *
      */
     private $tel;
     /**
      * @ORM\Column(type="string", length=180)
-     * @Groups({"users_read"})
+     * @Groups({"users_read","medecins_read","assures_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read"})
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $roles = [];
 
@@ -61,35 +61,69 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read"})
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read"})
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $prenoms;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read","medecins_read","assures_read"})
+     */
+    private $genre;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Groups({"users_read","medecins_read","assures_read"})
+     */
+    private $dateNaissance;
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"users_read","medecins_read","assures_read"})
+     */
+    private $photo;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read","medecins_read","assures_read"})
+     */
+    private $residence;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read","medecins_read","assures_read"})
+     */
+    private $numeroCni;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -264,6 +298,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenoms(string $prenoms): self
     {
         $this->prenoms = $prenoms;
+
+        return $this;
+    }
+
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(string $genre): self
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getResidence(): ?string
+    {
+        return $this->residence;
+    }
+
+    public function setResidence(string $residence): self
+    {
+        $this->residence = $residence;
+
+        return $this;
+    }
+
+    public function getNumeroCni(): ?string
+    {
+        return $this->numeroCni;
+    }
+
+    public function setNumeroCni(string $numeroCni): self
+    {
+        $this->numeroCni = $numeroCni;
 
         return $this;
     }

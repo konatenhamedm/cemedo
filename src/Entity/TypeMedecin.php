@@ -19,12 +19,13 @@ class TypeMedecin
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"medecins_read","assures_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"medecins_read"})
+     * @Groups({"medecins_read","assures_read"})
      */
     private $libelle;
 

@@ -23,6 +23,7 @@ class Ordonnance
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","facture_read","ordonnance_read"})
      */
     private $id;
 
@@ -34,19 +35,19 @@ class Ordonnance
 
     /**
      * @ORM\ManyToOne(targetEntity=Medicament::class, inversedBy="ordonnances")
-     * @Groups({"facture_read","ordonnance_read"})
+     * @Groups({"assures_read","facture_read","ordonnance_read"})
      */
     private $medicament;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"facture_read","ordonnance_read"})
+     * @Groups({"assures_read","facture_read","ordonnance_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
-     * @Groups({"facture_read","ordonnance_read"})
+     * @Groups({"assures_read","facture_read","ordonnance_read"})
      */
     private $updatedAt;
 

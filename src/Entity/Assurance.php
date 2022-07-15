@@ -25,6 +25,7 @@ class Assurance
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","assurance_read"})
      */
     private $id;
 

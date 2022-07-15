@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\NotificationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -16,53 +17,62 @@ class Notification
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $body;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $dateNotif;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="notifications")
-     */
-    private $patient;
-
-    /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $statut;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read"})
      */
     private $active;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $libelle;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="notifications")
+     */
+    private $assure;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -174,6 +184,18 @@ class Notification
     public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getAssure(): ?Assure
+    {
+        return $this->assure;
+    }
+
+    public function setAssure(?Assure $assure): self
+    {
+        $this->assure = $assure;
 
         return $this;
     }

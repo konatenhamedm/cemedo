@@ -20,6 +20,7 @@ class Facture
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","facture_read"})
      */
     private $id;
 

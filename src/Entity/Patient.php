@@ -2,26 +2,60 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PatientRepository;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *
- *      * itemOperations={"GET","PUT","DELETE","increment"={
- *     "method"="get",
- *     "path"="/invoices/{id}/increment"
- *      ,"controller"="App\Controller\DefaultController",
- *      "swagger_context"={
- *         "summary"="Incremente une facture",
- *        "description"="Permet de creer une facture"
- *     }
- *     }}
+ *   collectionOperations={
+ *     "get",
+ *     "post" = {
+ *       "controller" ="App\Controller\DefaultController",
+ *       "deserialize" = false,
+ *        "openapi_context" = {
+ *         "requestBody" = {
+ *           "description" = "File upload to an existing resource (superheroes)",
+ *           "required" = true,
+ *           "content" = {
+ *             "multipart/form-data" = {
+ *               "schema" = {
+ *                 "type" = "object",
+ *                 "properties" = {
+ *                   "password" = {
+ *                     "description" = "The name of the superhero",
+ *                     "type" = "string",
+ *                     "example" = "Clark Kent",
+ *                   },
+ *                   "tel" = {
+ *                     "description" = "The name of the superhero",
+ *                     "type" = "string",
+ *                     "example" = "Clark Kent",
+ *                   },
+ *                   "pieceIdRecto" = {
+ *                     "type" = "string",
+ *                     "format" = "binary",
+ *                     "description" = "Upload a cover image of the superhero",
+ *                   },
+ *                    "pieceIdVerso" = {
+ *                     "type" = "string",
+ *                     "format" = "binary",
+ *                     "description" = "Upload a cover image of the superhero",
+ *                   },
+ *                 },
+ *               },
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
  * )
  * @ORM\Entity(repositoryClass=PatientRepository::class)
  */
@@ -31,22 +65,22 @@ class Patient extends Assure
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $id;
 
     /**
-     * @ApiSubresource()
-     * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
-     */
-    private $membresFamille;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="patient")
-     */
-    private $notifications;
-
-    /**
+     * @var File null
+     * @Groups({"assures_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @ApiProperty(
+     *   iri="http://schema.org/image",
+     *   attributes={
+     *     "openapi_context"={
+     *       "type"="string",
+     *     }
+     *   }
+     * )
      */
     private $pieceIdRecto;
 
@@ -70,71 +104,12 @@ class Patient extends Assure
      */
     private $rendezVous;
 
-    public function __construct()
-    {
-        $this->membresFamille = new ArrayCollection();
-        $this->notifications = new ArrayCollection();
-    }
-
     /**
-     * @return Collection<int, MembreFamille>
+     * @Groups({"assures_read"})
+     * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
      */
-    public function getMembresFamille(): Collection
-    {
-        return $this->membresFamille;
-    }
+    private $membresFamille;
 
-    public function addMembreFamille(MembreFamille $membreFamille): self
-    {
-        if (!$this->membresFamille->contains($membreFamille)) {
-            $this->membresFamille[] = $membreFamille;
-            $membreFamille->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMembreFamille(MembreFamille $membreFamille): self
-    {
-        if ($this->membresFamille->removeElement($membreFamille)) {
-            // set the owning side to null (unless already changed)
-            if ($membreFamille->getPatient() === $this) {
-                $membreFamille->setPatient(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Notification>
-     */
-    public function getNotifications(): Collection
-    {
-        return $this->notifications;
-    }
-
-    public function addNotification(Notification $notification): self
-    {
-        if (!$this->notifications->contains($notification)) {
-            $this->notifications[] = $notification;
-            $notification->setPatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNotification(Notification $notification): self
-    {
-        if ($this->notifications->removeElement($notification)) {
-            // set the owning side to null (unless already changed)
-            if ($notification->getPatient() === $this) {
-                $notification->setPatient(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getPieceIdRecto(): ?string
     {
@@ -192,6 +167,36 @@ class Patient extends Assure
     public function setRendezVous(?RendezVous $rendezVous): self
     {
         $this->rendezVous = $rendezVous;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MembreFamille>
+     */
+    public function getMembresFamille(): Collection
+    {
+        return $this->membresFamille;
+    }
+
+    public function addMembreFamille(MembreFamille $membreFamille): self
+    {
+        if (!$this->membresFamille->contains($membreFamille)) {
+            $this->membresFamille[] = $membreFamille;
+            $membreFamille->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMembreFamille(MembreFamille $membreFamille): self
+    {
+        if ($this->membresFamille->removeElement($membreFamille)) {
+            // set the owning side to null (unless already changed)
+            if ($membreFamille->getPatient() === $this) {
+                $membreFamille->setPatient(null);
+            }
+        }
 
         return $this;
     }

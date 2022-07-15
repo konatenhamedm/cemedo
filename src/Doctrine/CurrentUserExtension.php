@@ -36,9 +36,12 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface,QueryIte
                 || $resourceClass === MembreFamille::class || $resourceClass === Notification::class
                 ||  $resourceClass === Adresse::class || $resourceClass === Affection::class
                 || $resourceClass === Ordonnance::class) && !$this->auth->isGranted("ROLE_ADMIN")){
-
             $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere("$rootAlias.assure = :user");
+                if ($resourceClass instanceof  MembreFamille ){
+                    $queryBuilder->andWhere("$rootAlias.patient = :user");
+                }else{
+                    $queryBuilder->andWhere("$rootAlias.assure = :user");
+                }
 
             $queryBuilder->setParameter("user",$user);
 

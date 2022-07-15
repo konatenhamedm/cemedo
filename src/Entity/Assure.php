@@ -22,7 +22,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      "groups"= {"assures_read"}
  *          }
  * )
- * @ApiFilter(SearchFilter::class,properties={"tel": "partial"} )
+ * @ApiFilter(SearchFilter::class,properties={"tel": "exact"} )
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"assure" = "Assure", "patient" = "Patient","membre" = "MembreFamille"})
@@ -197,6 +197,18 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $dossierMedical;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Livraison::class, mappedBy="assure")
+     * @Groups({"assures_read"})
+     */
+    private $livraisons;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="assure")
+     * @Groups({"assures_read"})
+     */
+    private $notifications;
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -258,6 +270,8 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         $this->carnetSante = new ArrayCollection();
         $this->antecedants = new ArrayCollection();
         $this->dossierMedical = new ArrayCollection();
+        $this->livraisons = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -698,6 +712,66 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($dossierMedical->getAssure() === $this) {
                 $dossierMedical->setAssure(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Livraison>
+     */
+    public function getLivraisons(): Collection
+    {
+        return $this->livraisons;
+    }
+
+    public function addLivraison(Livraison $livraison): self
+    {
+        if (!$this->livraisons->contains($livraison)) {
+            $this->livraisons[] = $livraison;
+            $livraison->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivraison(Livraison $livraison): self
+    {
+        if ($this->livraisons->removeElement($livraison)) {
+            // set the owning side to null (unless already changed)
+            if ($livraison->getAssure() === $this) {
+                $livraison->setAssure(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setAssure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getAssure() === $this) {
+                $notification->setAssure(null);
             }
         }
 

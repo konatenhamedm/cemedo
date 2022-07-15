@@ -7,6 +7,7 @@ use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,16 +19,19 @@ class Service
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $description;
 
@@ -38,26 +42,31 @@ class Service
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeService::class, inversedBy="services")
+     * @Groups({"assures_read"})
      */
     private $typeService;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read"})
      */
     private $active;
 

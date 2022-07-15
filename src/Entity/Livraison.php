@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\LivraisonRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -16,43 +17,56 @@ class Livraison
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $dateLivraison;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $modePaiement;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
      */
     private $etat;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read"})
      */
     private $active;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="livraisons")
+     */
+    private $assure;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -140,6 +154,18 @@ class Livraison
     public function setEtat(string $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getAssure(): ?Assure
+    {
+        return $this->assure;
+    }
+
+    public function setAssure(?Assure $assure): self
+    {
+        $this->assure = $assure;
 
         return $this;
     }

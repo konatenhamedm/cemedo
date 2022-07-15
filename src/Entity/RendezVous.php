@@ -7,6 +7,7 @@ use App\Repository\RendezVousRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,26 +19,31 @@ class RendezVous
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Gerant::class, inversedBy="rendezVouses")
+     * @Groups({"assures_read"})
      */
     private $gerant;
 
     /**
      * @ORM\ManyToOne(targetEntity=Assure::class, inversedBy="rendezVouses")
+     *
      */
     private $concerne;
 
     /**
      * @ORM\ManyToOne(targetEntity=Medecin::class, inversedBy="rendezVouses")
+     * @Groups({"assures_read"})
      */
     private $medecin;
 
     /**
      * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="rendezVouses")
+     * @Groups({"assures_read"})
      */
     private $service;
 
@@ -48,21 +54,25 @@ class RendezVous
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"assures_read"})
      */
     private $active;
 
