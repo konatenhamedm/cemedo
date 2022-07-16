@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *   collectionOperations={
  *     "get",
  *     "post" = {
+ *     "path"="/patients/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "deserialize" = false,
  *        "openapi_context" = {
@@ -56,6 +57,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
+ *     itemOperations={"get", "delete","put"},
+ *     denormalizationContext={"disable_type_enforcement"=true}
  * )
  * @ORM\Entity(repositoryClass=PatientRepository::class)
  */

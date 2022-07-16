@@ -20,7 +20,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * @ApiResource(
  *      normalizationContext={
  *      "groups"= {"assures_read"}
- *          }
+ *          },
+ *     denormalizationContext={"disable_type_enforcement"=true}
  * )
  * @ApiFilter(SearchFilter::class,properties={"tel": "exact"} )
  * @ORM\InheritanceType("JOINED")
@@ -90,7 +91,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=12,  unique=true)
      * @Groups({"assures_read"})
-     * @Assert\NotBlank(message="Nous avons besoin de votre email")
+     * @Assert\NotBlank(message="Nous avons besoin de votre numéro de telephone")
      */
     private $tel;
 
@@ -138,7 +139,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      * @Groups({"assures_read"})
      */
     private $dateNaissance;
@@ -561,7 +562,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
+    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
 

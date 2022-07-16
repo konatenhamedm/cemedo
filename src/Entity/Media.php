@@ -11,7 +11,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=MediaRepository::class)
  * * @ApiResource(
- *   iri="http://schema.org/ImageObject",
  *   normalizationContext={"groups" = {"read"}},
  *   collectionOperations={
  *     "get",
@@ -40,7 +39,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
- *   itemOperations={"get", "delete"}
  * )
  */
 class Media
@@ -54,7 +52,14 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @ApiProperty(iri="http://schema.org/contentUrl")
+     * @ApiProperty(
+     *   iri="http://schema.org/image",
+     *   attributes={
+     *     "openapi_context"={
+     *       "type"="string",
+     *     }
+     *   }
+     * )
      * @Groups({"read"})
      */
     private $filePath;

@@ -108,12 +108,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $dateNaissance;
 
     /**
-     * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"users_read","medecins_read","assures_read"})
-     */
-    private $photo;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users_read","medecins_read","assures_read"})
      */
@@ -322,18 +316,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateNaissance(\DateTimeInterface $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(string $photo): self
-    {
-        $this->photo = $photo;
 
         return $this;
     }

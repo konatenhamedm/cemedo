@@ -19,13 +19,13 @@ class RendezVous
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Gerant::class, inversedBy="rendezVouses")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $gerant;
 
@@ -43,7 +43,7 @@ class RendezVous
 
     /**
      * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="rendezVouses")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $service;
 
@@ -54,29 +54,30 @@ class RendezVous
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","medecins_read"})
      */
     private $active;
 
     /**
+     * @Groups({"medecins_read"})
      * @ORM\OneToMany(targetEntity=Patient::class, mappedBy="rendezVous")
      */
     private $emetteur;

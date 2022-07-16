@@ -15,8 +15,6 @@
          $data['nom'] = $user->getNom();
          $data['prenoms'] = $user->getPrenoms();
          $data['tel'] = $user->getTel();
-         $data['lieuHabitation'] = $user->getLieuHabitation();
-         $data['fcmtoken'] = $user->getFcmtoken();
          $data['status'] = 200;
          $event->setData($data);
       //dd($event->getData());
