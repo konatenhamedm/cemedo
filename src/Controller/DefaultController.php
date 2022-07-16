@@ -121,20 +121,21 @@ class DefaultController
                 $entity->setResidence($request->request->get("residence"));
 
             if ($request->attributes->get('_api_resource_class') === "App\Entity\Infirmier"){
-                $entity->setSalaireInfirmier($request->request->get("salaireInfirmier"));
+                if ($request->request->get("salaireInfirmier"))
+                    $entity->setSalaireInfirmier($request->request->get("salaireInfirmier"));
             }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\Medecin"){
 
-                if ($request->request->get("numeroCni"))
-                    $entity->setPrimeMedecin($request->request->get("numeroCni"));
-                if ($request->request->get("numeroCni"))
-                    $entity->setSalaireMedecin($request->request->get("numeroCni"));
-                if ($request->request->get("numeroCni"))
-                    $entity->setSepecialiteMedecin($request->request->get("numeroCni"));
-                if ($request->request->get("numeroCni"))
+                if ($request->request->get("primeMedecin"))
+                    $entity->setPrimeMedecin($request->request->get("primeMedecin"));
+                if ($request->request->get("salaireMedecin"))
+                    $entity->setSalaireMedecin($request->request->get("salaireMedecin"));
+                if ($request->request->get("specialiteMedecin"))
+                    $entity->setSepecialiteMedecin($request->request->get("specialiteMedecin"));
+                if ($request->request->get("typeMedecin"))
                     $entity->setTypeMedecin($this->repository->find($request->request->get("typeMedecin")));
-                if ($request->request->get("numeroCni"))
+                if ($request->request->get("heureDebut"))
                     $entity->setHeureDebut(\DateTime::createFromFormat('Y-m-d', $request->request->get("heureDebut")));
-                if ($request->request->get("numeroCni"))
+                if ($request->request->get("heureFin"))
                     $entity->setHeureFin(\DateTime::createFromFormat('Y-m-d', $request->request->get("heureFin")));
 
             }
@@ -154,7 +155,7 @@ class DefaultController
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function apiAction(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    public function newPatient(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
         $pieceIdRecto = $request->files->get('pieceIdRecto');
@@ -206,35 +207,314 @@ class DefaultController
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
-        //$response = new Response();
 
-        /*  $date = new \DateTime();
-
-          $response->setContent(json_encode([
-              'id' => uniqid(),
-              'time' => $date->format("Y-m-d")
-          ]));
-
-          $response->headers->set('Content-Type', 'application/json');
-
-          return $response;*/
     }
 
-    /*
-     * @Route("/api/assure/find", name="find", methods={"get"})
+
+    /**
+     * @Route("/cemedo/administrateurs", name="admin", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function findAssure(Request $request, PatientRepository $repository)
+    public function newAdministrateur(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
-        $data = $repository->find(1);
+        $photo = $request->files->get('photo');
+        $entity = new Administrateur();
+
+        $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+
+        if ($request->request->get("password"))
+            $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+        // dd($entity);
+        if ($request->request->get("password"))
+            $entity->setPassword($hashs);
+        if ($photo)
+            $entity->setPhoto($fileUploader->upload($photo));
+        if ($request->request->get("nom"))
+            $entity->setNom($request->request->get("nom"));
+        if ($request->request->get("prenoms"))
+            $entity->setPrenoms($request->request->get("prenoms"));
+        if ($request->request->get("email"))
+            $entity->setEmail($request->request->get("email"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("dateNaissance"))
+            $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        if ($request->request->get("genre"))
+            $entity->setGenre($request->request->get("genre"));
+        if ($request->request->get("numeroCni"))
+            $entity->setNumeroCni($request->request->get("numeroCni"));
+        if ($request->request->get("residence"))
+            $entity->setResidence($request->request->get("residence"));
+        $entity->setRoles(array("ROLE_ADMIN"));
+         $entity->setCreatedAt(new \DateTime('now'));
+         $entity->setUpdatedAt(new \DateTime('now'));
+         $entity->setActive(true);
+         $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
 
         $response->setContent(json_encode([
             'status' => 200,
-            'data' => $data
+            'data' => "dedicace a mon pote yves"
         ]));
 
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+
+    }
+
+
+    /**
+     * @Route("/cemedo/gerants", name="gerant", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newGerant(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    {
+        $response = new Response();
+        $photo = $request->files->get('photo');
+        $entity = new Gerant();
+
+        $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+
+        if ($request->request->get("password"))
+            $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+        // dd($entity);
+        if ($request->request->get("password"))
+            $entity->setPassword($hashs);
+        if ($photo)
+            $entity->setPhoto($fileUploader->upload($photo));
+        if ($request->request->get("nom"))
+            $entity->setNom($request->request->get("nom"));
+        if ($request->request->get("prenoms"))
+            $entity->setPrenoms($request->request->get("prenoms"));
+        if ($request->request->get("email"))
+            $entity->setEmail($request->request->get("email"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("dateNaissance"))
+            $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        if ($request->request->get("genre"))
+            $entity->setGenre($request->request->get("genre"));
+        if ($request->request->get("numeroCni"))
+            $entity->setNumeroCni($request->request->get("numeroCni"));
+        if ($request->request->get("residence"))
+            $entity->setResidence($request->request->get("residence"));
+        $entity->setRoles(array("ROLE_GERANT"));
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setUpdatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => "dedicace a mon pote yves"
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
+    }
+
+
+    /**
+     * @Route("/cemedo/pharmaciens", name="pharmacien", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newPharmacien(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    {
+        $response = new Response();
+        $photo = $request->files->get('photo');
+        $entity = new Pharmacien();
+
+        $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+
+        if ($request->request->get("password"))
+            $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+        // dd($entity);
+        if ($request->request->get("password"))
+            $entity->setPassword($hashs);
+        if ($photo)
+            $entity->setPhoto($fileUploader->upload($photo));
+        if ($request->request->get("nom"))
+            $entity->setNom($request->request->get("nom"));
+        if ($request->request->get("prenoms"))
+            $entity->setPrenoms($request->request->get("prenoms"));
+        if ($request->request->get("email"))
+            $entity->setEmail($request->request->get("email"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("dateNaissance"))
+            $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        if ($request->request->get("genre"))
+            $entity->setGenre($request->request->get("genre"));
+        if ($request->request->get("numeroCni"))
+            $entity->setNumeroCni($request->request->get("numeroCni"));
+        if ($request->request->get("residence"))
+            $entity->setResidence($request->request->get("residence"));
+        $entity->setRoles(array("ROLE_PHARMACIEN"));
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setUpdatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => "dedicace a mon pote yves"
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
+    }
+
+
+    /**
+     * @Route("/cemedo/infirmiers", name="infirmier", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newInfirmier(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    {
+        $response = new Response();
+        $photo = $request->files->get('photo');
+        $entity = new Infirmier();
+
+        $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+
+        if ($request->request->get("password"))
+            $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+        // dd($entity);
+        if ($request->request->get("password"))
+            $entity->setPassword($hashs);
+        if ($photo)
+            $entity->setPhoto($fileUploader->upload($photo));
+        if ($request->request->get("nom"))
+            $entity->setNom($request->request->get("nom"));
+        if ($request->request->get("prenoms"))
+            $entity->setPrenoms($request->request->get("prenoms"));
+        if ($request->request->get("email"))
+            $entity->setEmail($request->request->get("email"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("dateNaissance"))
+            $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        if ($request->request->get("genre"))
+            $entity->setGenre($request->request->get("genre"));
+        if ($request->request->get("numeroCni"))
+            $entity->setNumeroCni($request->request->get("numeroCni"));
+        if ($request->request->get("residence"))
+            $entity->setResidence($request->request->get("residence"));
+        if ($request->request->get("salaireInfirmier"))
+            $entity->setSalaireInfirmier($request->request->get("salaireInfirmier"));
+        $entity->setRoles(array("ROLE_INFIRMIER"));
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setUpdatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => "dedicace a mon pote yves"
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
+    }
+
+    /**
+     * @Route("/cemedo/medecins", name="medecins", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newMedecin(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    {
+        $response = new Response();
+        $photo = $request->files->get('photo');
+        $entity = new Medecin();
+
+        $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+
+        if ($request->request->get("password"))
+            $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+        // dd($entity);
+        if ($request->request->get("password"))
+            $entity->setPassword($hashs);
+        if ($photo)
+            $entity->setPhoto($fileUploader->upload($photo));
+        if ($request->request->get("nom"))
+            $entity->setNom($request->request->get("nom"));
+        if ($request->request->get("prenoms"))
+            $entity->setPrenoms($request->request->get("prenoms"));
+        if ($request->request->get("email"))
+            $entity->setEmail($request->request->get("email"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("dateNaissance"))
+            $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        if ($request->request->get("genre"))
+            $entity->setGenre($request->request->get("genre"));
+        if ($request->request->get("numeroCni"))
+            $entity->setNumeroCni($request->request->get("numeroCni"));
+        if ($request->request->get("residence"))
+            $entity->setResidence($request->request->get("residence"));
+        if ($request->request->get("primeMedecin"))
+            $entity->setPrimeMedecin($request->request->get("primeMedecin"));
+        if ($request->request->get("salaireMedecin"))
+            $entity->setSalaireMedecin($request->request->get("salaireMedecin"));
+        if ($request->request->get("specialiteMedecin"))
+            $entity->setSepecialiteMedecin($request->request->get("specialiteMedecin"));
+        if ($request->request->get("typeMedecin"))
+            $entity->setTypeMedecin($this->repository->find($request->request->get("typeMedecin")));
+        if ($request->request->get("heureDebut"))
+            $entity->setHeureDebut(\DateTime::createFromFormat('Y-m-d', $request->request->get("heureDebut")));
+        if ($request->request->get("heureFin"))
+            $entity->setHeureFin(\DateTime::createFromFormat('Y-m-d', $request->request->get("heureFin")));
+        $entity->setRoles(array("ROLE_MEDECIN"));
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setUpdatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => "dedicace a mon pote yves"
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
     }
 }

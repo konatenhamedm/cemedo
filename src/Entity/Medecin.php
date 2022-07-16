@@ -86,7 +86,7 @@ class Medecin extends User
      * @ORM\Column(type="string", length=255)
      * @Groups({"medecins_read","assures_read"})
      */
-    private $sepecialiteMedecin;
+    private $specialiteMedecin;
 
     /**
      * @ORM\Column(type="float")
@@ -186,12 +186,12 @@ class Medecin extends User
 
     public function getSepecialiteMedecin(): ?string
     {
-        return $this->sepecialiteMedecin;
+        return $this->specialiteMedecin;
     }
 
-    public function setSepecialiteMedecin(string $sepecialiteMedecin): self
+    public function setSepecialiteMedecin(string $specialiteMedecin): self
     {
-        $this->sepecialiteMedecin = $sepecialiteMedecin;
+        $this->specialiteMedecin = $specialiteMedecin;
 
         return $this;
     }
