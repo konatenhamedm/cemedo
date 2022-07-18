@@ -73,6 +73,11 @@ class Facture
      */
     private $assure;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -183,6 +188,18 @@ class Facture
     public function setAssure(?Assure $assure): self
     {
         $this->assure = $assure;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

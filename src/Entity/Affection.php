@@ -21,12 +21,6 @@ class Affection
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *  @Groups({"assures_read"})
-     */
-    private $value;
-
 
     /**
      * @ORM\Column(type="datetime")
@@ -68,6 +62,11 @@ class Affection
      *  @Groups({"assures_read"})
      */
     private $libelle;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $value;
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -123,18 +122,6 @@ class Affection
         return $this->id;
     }
 
-    public function getValue(): ?string
-    {
-        return $this->value;
-    }
-
-    public function setValue(string $value): self
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
     public function getCle(): ?string
     {
         return $this->cle;
@@ -167,6 +154,18 @@ class Affection
     public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function isValue(): ?bool
+    {
+        return $this->value;
+    }
+
+    public function setValue(bool $value): self
+    {
+        $this->value = $value;
 
         return $this;
     }

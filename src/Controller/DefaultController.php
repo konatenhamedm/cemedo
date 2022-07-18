@@ -8,13 +8,26 @@ use App\Entity\Assure;
 use App\Entity\Gerant;
 use App\Entity\Infirmier;
 use App\Entity\Medecin;
+use App\Entity\Medicament;
 use App\Entity\Patient;
 use App\Entity\Pharmacien;
 use App\Entity\User;
+use App\Repository\AdresseRepository;
+use App\Repository\AffectionRepository;
 use App\Repository\AssuranceRepository;
+use App\Repository\FactureRepository;
+use App\Repository\FichierMedicalRepository;
 use App\Repository\GerantRepository;
+use App\Repository\MedecinRepository;
+use App\Repository\MedicamentRepository;
+use App\Repository\MembreFamilleRepository;
+use App\Repository\OrdonnanceRepository;
+use App\Repository\PageCarnetSanteRepository;
 use App\Repository\PatientRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\TypeFichierMedicalRepository;
 use App\Repository\TypeMedecinRepository;
+use App\Repository\TypeServiceRepository;
 use App\Repository\UserRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -516,5 +529,193 @@ class DefaultController
 
         return $response;
 
+    }
+
+    /**
+     * @Route("/cemedo/all_object", name="all_object", methods={"post","get"})
+     * @param AdresseRepository $adresseRepository
+     * @param MedecinRepository $medecinRepository
+     * @param FactureRepository $factureRepository
+     * @param AffectionRepository $affectionRepository
+     * @param AssuranceRepository $assuranceRepository
+     * @param MembreFamilleRepository $membreFamilleRepository
+     * @param PatientRepository $patientRepository
+     * @param ServiceRepository $serviceRepository
+     * @param OrdonnanceRepository $ordonnanceRepository
+     * @param MedicamentRepository $medicamentRepository
+     * @param TypeFichierMedicalRepository $typeFichierMedicalRepository
+     * @param FichierMedicalRepository $fichierMedicalRepository
+     * @param TypeMedecinRepository $typeMedecinRepository
+     * @param TypeServiceRepository $typeServiceRepository
+     * @param PageCarnetSanteRepository $pageCarnetSanteRepository
+     * @return Response
+     */
+    public function getALlObject(
+    AdresseRepository $adresseRepository,MedecinRepository $medecinRepository,FactureRepository $factureRepository,
+    AffectionRepository $affectionRepository,AssuranceRepository $assuranceRepository,MembreFamilleRepository $membreFamilleRepository
+    ,PatientRepository $patientRepository,ServiceRepository $serviceRepository,OrdonnanceRepository $ordonnanceRepository,
+    MedicamentRepository $medicamentRepository,TypeFichierMedicalRepository $typeFichierMedicalRepository,FichierMedicalRepository $fichierMedicalRepository
+    ,TypeMedecinRepository $typeMedecinRepository,TypeServiceRepository $typeServiceRepository,PageCarnetSanteRepository $pageCarnetSanteRepository
+    )
+{
+//dd($medecinRepository->findAll());
+    $response = new Response();
+
+        $arrayFacture = array();
+        foreach ($factureRepository->findAll() as $patient){
+            $arrayFacture [] = array(
+                'id'=>$patient->getId(),
+                'libelle'=>$patient->getLibelle(),
+                'montant'=>$patient->getMontant(),
+            );
+        }
+
+        $arrayFamille = array();
+        foreach ($membreFamilleRepository->findAll() as $patient){
+            $arrayFamille [] = array(
+                'id'=>$patient->getId(),
+                'nom'=>$patient->getNom(),
+                'prenom'=>$patient->getPrenoms(),
+                'tel'=>$patient->getTel(),
+                'tel2'=>$patient->getTel2(),
+            );
+        }
+        $arrayPatient = array();
+
+    foreach ($patientRepository->findAll() as $patient){
+        $arrayPatient [] = array(
+            'id'=>$patient->getId(),
+            'nom'=>$patient->getNom(),
+            'prenom'=>$patient->getPrenoms(),
+            'tel'=>$patient->getTel(),
+            'tel2'=>$patient->getTel2(),
+        );
+    }
+
+    $arrayAdresse = array();
+    foreach ($adresseRepository->findAll() as $patient){
+        $arrayAdresse [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+    $arrayAffection = array();
+    foreach ($affectionRepository->findAll() as $patient){
+        $arrayAffection [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'value'=>$patient->isValue(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayAssurance = array();
+    foreach ($assuranceRepository->findAll() as $patient){
+        $arrayAssurance [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayService = array();
+    foreach ($serviceRepository->findAll() as $patient){
+        $arrayService [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayTypeService = array();
+    foreach ($typeServiceRepository->findAll() as $patient){
+        $arrayTypeService [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayTypeMedecin = array();
+    foreach ($typeMedecinRepository->findAll() as $patient){
+        $arrayTypeMedecin [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayTypeFichier = array();
+    foreach ($typeFichierMedicalRepository->findAll() as $patient){
+        $arrayTypeFichier [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayOrdonnance = array();
+    foreach ($ordonnanceRepository->findAll() as $patient){
+        $arrayOrdonnance [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayMedicament = array();
+    foreach ($medicamentRepository->findAll() as $patient){
+        $arrayMedicament [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayPageCarnet = array();
+    foreach ($pageCarnetSanteRepository->findAll() as $patient){
+        $arrayPageCarnet [] = array(
+            'id'=>$patient->getId(),
+            'lien'=>$patient->getLienFichier(),
+            'active'=>$patient->isActive(),
+        );
+    }
+      $arrayFichierMedical = array();
+    foreach ($fichierMedicalRepository->findAll() as $patient){
+        $arrayFichierMedical [] = array(
+            'id'=>$patient->getId(),
+            'libelle'=>$patient->getLibelle(),
+            'active'=>$patient->isActive(),
+        );
+    }
+
+    $arrayMedecin = array();
+    foreach ($medecinRepository->findAll() as $patient){
+        $arrayMedecin [] = array(
+            'id'=>$patient->getId(),
+            'nom'=>$patient->getNom(),
+            'prenoms'=>$patient->getPrenoms(),
+            'specialite'=>$patient->getSepecialiteMedecin(),
+            'active'=>$patient->isActive(),
+        );
+    }
+
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'patients' => $arrayPatient,
+            'adresses' => $arrayAdresse,
+            'affections' => $arrayAffection,
+            'assurances' => $arrayAssurance,
+            'services' => $arrayService,
+            'typeServices' => $arrayTypeService,
+            'typeMedecins' => $arrayTypeMedecin,
+            'typeFichiers' => $arrayTypeFichier,
+            'ordonnance' => $arrayOrdonnance,
+            'medicament' => $arrayMedicament,
+            'pageCarnets' => $arrayPageCarnet,
+            'fichierFichierMedicaments' => $arrayFichierMedical,
+            'medecins' => $arrayMedecin,
+            'factures' => $arrayFacture,
+            'familles' => $arrayFamille
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 }
