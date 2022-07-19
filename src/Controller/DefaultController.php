@@ -634,8 +634,12 @@ class DefaultController
         $arrayService [] = array(
             'id'=>$patient['id'],
             'libelle'=>$patient['libelle'],
+            'description'=>$patient['description'],
             'active'=>$patient['active'],
-            'typeService'=>$patient['typeService'],
+            'typeService'=>[
+                'id'=>$patient['typeServiceId'],
+                'libelle'=>$patient['typeService']
+            ],
         );
     }
    // dd($arrayService);

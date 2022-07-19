@@ -41,7 +41,7 @@ class ServiceRepository extends ServiceEntityRepository
     public function getServices()
     {
         return $this->createQueryBuilder("s")
-            ->select("s.id","s.libelle","s.active as active","t.libelle as typeService")
+            ->select("s.id","s.libelle","s.description","s.active as active","t.libelle as typeService","t.id as typeServiceId")
             ->innerJoin('s.typeService','t')
             ->where('t.active=:active')
             ->setParameters(array('active'=>1))
