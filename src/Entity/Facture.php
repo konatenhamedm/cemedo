@@ -20,7 +20,7 @@ class Facture
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read","facture_read"})
+     * @Groups({"assures_read","facture_read","admin_read"})
      */
     private $id;
 
@@ -31,34 +31,37 @@ class Facture
 
     /**
      * @ORM\Column(type="float")
-     *  @Groups({"assures_read","facture_read"})
+     *  @Groups({"assures_read","facture_read","admin_read"})
      */
     private $montant;
 
     /**
      * @ORM\Column(type="datetime")
-     *  @Groups({"assures_read","facture_read"})
+     *  @Groups({"assures_read","facture_read","admin_read"})
      */
     private $dateEmission;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"assures_read","facture_read","admin_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read","facture_read","admin_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","facture_read","admin_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"assures_read","facture_read"})
+     * @Groups({"assures_read","facture_read","admin_read"})
      */
     private $active;
 

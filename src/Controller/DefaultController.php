@@ -55,9 +55,9 @@ class DefaultController
 
     }
 
-    public function __invoke(UserRepository $repository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
+    public function __invoke(UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
     {
-        //dd($repository->find($request->attributes->get('id')));
+       // dd();
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
             $entity = $patientRepository->find($request->attributes->get('id'));
 
@@ -105,7 +105,18 @@ class DefaultController
                 $entity->setNumeroAssure($request->request->get("numeroAssure"));
             if ($request->request->get("lieuHabitation"))
                 $entity->setLieuHabitation($request->request->get("lieuHabitation"));
-        }else{
+        }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\PageCarnetSante"){
+            $entity = $pageCarnetSanteRepository->find($request->attributes->get('id'));
+            $lieFichier = $request->files->get('lieFichier');
+            $user = $this->security->getUser();
+
+            if ($lieFichier)
+                $entity->setLienFichier($fileUploader->upload($lieFichier));
+
+            $entity->setAssure($user);
+
+        }
+        else{
             $entity = $repository->find($request->attributes->get('id'));
             $photo = $request->files->get('photo');
 //dd($photo);
@@ -440,7 +451,7 @@ class DefaultController
         if ($request->request->get("residence"))
             $entity->setResidence($request->request->get("residence"));
         if ($request->request->get("salaireInfirmier"))
-            $entity->setSalaireInfirmier($request->request->get("salaireInfirmier"));
+            $entity->setSalaireInfirmier(floatval($request->request->get("salaireInfirmier")));
         $entity->setRoles(array("ROLE_INFIRMIER"));
         $entity->setCreatedAt(new \DateTime('now'));
         $entity->setUpdatedAt(new \DateTime('now'));
@@ -500,9 +511,9 @@ class DefaultController
         if ($request->request->get("residence"))
             $entity->setResidence($request->request->get("residence"));
         if ($request->request->get("primeMedecin"))
-            $entity->setPrimeMedecin($request->request->get("primeMedecin"));
+            $entity->setPrimeMedecin(floatval($request->request->get("primeMedecin")));
         if ($request->request->get("salaireMedecin"))
-            $entity->setSalaireMedecin($request->request->get("salaireMedecin"));
+            $entity->setSalaireMedecin(floatval($request->request->get("salaireMedecin")));
         if ($request->request->get("specialiteMedecin"))
             $entity->setSepecialiteMedecin($request->request->get("specialiteMedecin"));
         if ($request->request->get("typeMedecin"))

@@ -2,13 +2,50 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PageCarnetSanteRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *   collectionOperations={
+ *     "get",
+ *     "post" = {
+ *     "path"="/page_carnet_santes/{id}/update",
+ *       "controller" ="App\Controller\DefaultController",
+ *       "deserialize" = false,
+ *        "openapi_context" = {
+ *         "requestBody" = {
+ *           "description" = "File upload to an existing resource (superheroes)",
+ *           "required" = true,
+ *           "content" = {
+ *             "multipart/form-data" = {
+ *               "schema" = {
+ *                 "type" = "object",
+ *                 "properties" = {
+ *                   "password" = {
+ *                     "description" = "The name of the superhero",
+ *                     "type" = "string",
+ *                     "example" = "Clark Kent",
+ *                   },
+ *                    "lienFichier" = {
+ *                     "type" = "string",
+ *                     "format" = "binary",
+ *                     "description" = "Upload a cover image of the superhero",
+ *                   },
+ *                 },
+ *               },
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ *     itemOperations={"get", "delete","put"},
+ *     denormalizationContext={"disable_type_enforcement"=true}
+ * )
  * @ORM\Entity(repositoryClass=PageCarnetSanteRepository::class)
  */
 class PageCarnetSante
@@ -24,6 +61,14 @@ class PageCarnetSante
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"assures_read"})
+     * * @ApiProperty(
+     *   iri="http://schema.org/image",
+     *   attributes={
+     *     "openapi_context"={
+     *       "type"="string",
+     *     }
+     *   }
+     * )
      */
     private $lienFichier;
 

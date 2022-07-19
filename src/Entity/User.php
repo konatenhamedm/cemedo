@@ -30,26 +30,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=12,  unique=true)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      * @Assert\NotBlank(message="Nous avons besoin de votre numero de telephone")
      *
      */
     private $tel;
     /**
      * @ORM\Column(type="string", length=180)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read","medecins_read","assures_read"})
+     *@Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $roles = [];
 
@@ -61,61 +61,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $prenoms;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $active;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $genre;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $dateNaissance;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $residence;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $numeroCni;
 

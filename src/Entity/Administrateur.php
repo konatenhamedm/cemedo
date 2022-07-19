@@ -11,6 +11,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     *      normalizationContext={
+ *      "groups"= {"admin_read"}
+ *          },
  *   collectionOperations={
  *     "get",
  *     "post" = {
@@ -63,11 +66,12 @@ class Administrateur extends User
 {
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="administrateur")
+     * @Groups({"admin_read"})
      */
     private $factures;
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"users_read","medecins_read","assures_read","admin_read"})
      */
     private $photoAdmininstareur;
 
