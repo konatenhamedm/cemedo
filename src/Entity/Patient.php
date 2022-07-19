@@ -68,13 +68,13 @@ class Patient extends Assure
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","familles_read"})
      */
     private $id;
 
     /**
      * @var File null
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","familles_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      * @ApiProperty(
      *   iri="http://schema.org/image",
@@ -89,16 +89,19 @@ class Patient extends Assure
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"assures_read","familles_read"})
      */
     private $pieceIdVerso;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"assures_read","familles_read"})
      */
     private $assuranceRecto;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"assures_read","familles_read"})
      */
     private $assuranceVerso;
 

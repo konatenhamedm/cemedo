@@ -558,7 +558,7 @@ class DefaultController
     ,TypeMedecinRepository $typeMedecinRepository,TypeServiceRepository $typeServiceRepository,PageCarnetSanteRepository $pageCarnetSanteRepository
     )
 {
-//dd($medecinRepository->findAll());
+
     $response = new Response();
 
         $arrayFacture = array();
@@ -618,13 +618,16 @@ class DefaultController
         );
     }
       $arrayService = array();
-    foreach ($serviceRepository->findAll() as $patient){
+
+    foreach ($serviceRepository->getServices() as $patient){
         $arrayService [] = array(
-            'id'=>$patient->getId(),
-            'libelle'=>$patient->getLibelle(),
-            'active'=>$patient->isActive(),
+            'id'=>$patient['id'],
+            'libelle'=>$patient['libelle'],
+            'active'=>$patient['active'],
+            'typeService'=>$patient['typeService'],
         );
     }
+   // dd($arrayService);
       $arrayTypeService = array();
     foreach ($typeServiceRepository->findAll() as $patient){
         $arrayTypeService [] = array(
@@ -702,8 +705,8 @@ class DefaultController
             'affections' => $arrayAffection,*/
             'assurances' => $arrayAssurance,
             'services' => $arrayService,
-            /*'typeServices' => $arrayTypeService,
-            'typeMedecins' => $arrayTypeMedecin,
+            'typeServices' => $arrayTypeService,
+           /* 'typeMedecins' => $arrayTypeMedecin,
             'typeFichiers' => $arrayTypeFichier,
             'ordonnance' => $arrayOrdonnance,
             'medicament' => $arrayMedicament,

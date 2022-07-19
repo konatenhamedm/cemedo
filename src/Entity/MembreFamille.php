@@ -31,7 +31,6 @@ class MembreFamille extends Assure
 
     /**
      * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="membreFamilles")
-     * @ORM\JoinColumn(nullable=false)
      * @Groups({"familles_read"})
      */
     private $patient;

@@ -38,6 +38,17 @@ class ServiceRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function getServices()
+    {
+        return $this->createQueryBuilder("s")
+            ->select("s.id","s.libelle","s.active as active","t.libelle as typeService")
+            ->innerJoin('s.typeService','t')
+            ->where('t.active=:active')
+            ->setParameters(array('active'=>1))
+            ->getQuery()
+            ->getResult();
+    }
+
 
 //    /**
 //     * @return Service[] Returns an array of Service objects
