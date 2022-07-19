@@ -29,7 +29,10 @@ final class SerializerPage implements ContextAwareNormalizerInterface, Normalize
         $context[self::ALREADY_CALLED] = true;
 
         // update the cover with the url
-        $object->setLienFichier($this->fileUploader->getUrl($object->getLienFichier()))  ;
+        if ($object->getLienFichier()){
+
+            $object->setLienFichier($this->fileUploader->getUrl($object->getLienFichier()))  ;
+        }
 
 
         return $this->normalizer->normalize($object, $format, $context);

@@ -34,7 +34,10 @@ final class SerializerUser implements ContextAwareNormalizerInterface, Normalize
         $context[self::ALREADY_CALLED] = true;
 
         // update the cover with the url
-        $object->setPhoto($this->fileUploader->getUrl($object->getPhoto()))  ;
+        if ($object->getPhoto()){
+
+            $object->setPhoto($this->fileUploader->getUrl($object->getPhoto()));
+        }
 
 
         return $this->normalizer->normalize($object, $format, $context);

@@ -28,10 +28,14 @@ final class Serializer implements ContextAwareNormalizerInterface, NormalizerAwa
         $context[self::ALREADY_CALLED] = true;
 
         // update the cover with the url
-        $object->setPieceIdRecto($this->fileUploader->getUrl($object->getPieceIdRecto()))  ;
-        $object->setPieceIdVerso($this->fileUploader->getUrl($object->getPieceIdVerso()))  ;
-        $object->setAssuranceRecto($this->fileUploader->getUrl($object->getAssuranceRecto()))  ;
-        $object->setAssuranceVerso($this->fileUploader->getUrl($object->getAssuranceVerso()))  ;
+        if($object->getPieceIdRecto())
+            $object->setPieceIdRecto($this->fileUploader->getUrl($object->getPieceIdRecto()))  ;
+        if ($object->getPieceIdVerso())
+            $object->setPieceIdVerso($this->fileUploader->getUrl($object->getPieceIdVerso()))  ;
+        if ($object->getAssuranceRecto())
+            $object->setAssuranceRecto($this->fileUploader->getUrl($object->getAssuranceRecto()))  ;
+        if ($object->getAssuranceVerso())
+            $object->setAssuranceVerso($this->fileUploader->getUrl($object->getAssuranceVerso()))  ;
 
         return $this->normalizer->normalize($object, $format, $context);
     }
