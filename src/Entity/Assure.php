@@ -209,6 +209,12 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $notifications;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read"})
+     */
+    private $profession;
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -774,6 +780,18 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
                 $notification->setAssure(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfession(): ?string
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(string $profession): self
+    {
+        $this->profession = $profession;
 
         return $this;
     }
