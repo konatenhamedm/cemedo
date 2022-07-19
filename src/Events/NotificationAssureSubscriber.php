@@ -14,6 +14,7 @@ use App\Entity\MembreFamille;
 use App\Entity\Notification;
 use App\Entity\Patient;
 use App\Entity\Pharmacien;
+use App\Entity\ResponsableAssurance;
 use App\Repository\AssuranceRepository;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -117,6 +118,8 @@ class NotificationAssureSubscriber implements EventSubscriberInterface
         }
         elseif ($element instanceof MembreFamille && $method ==="POST"){
             $element->setRoles(array("ROLE_FAMILLE"));
+        }elseif ($element instanceof ResponsableAssurance && $method ==="POST"){
+            $element->setRoles(array("ROLE_RESPONSABLE"));
         }
 
 

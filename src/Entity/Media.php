@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *   collectionOperations={
  *     "get",
  *     "post" = {
+ *       "path"="/medias/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "deserialize" = false,
  *       "openapi_context" = {

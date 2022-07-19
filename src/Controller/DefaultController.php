@@ -19,6 +19,7 @@ use App\Repository\FactureRepository;
 use App\Repository\FichierMedicalRepository;
 use App\Repository\GerantRepository;
 use App\Repository\MedecinRepository;
+use App\Repository\MediaRepository;
 use App\Repository\MedicamentRepository;
 use App\Repository\MembreFamilleRepository;
 use App\Repository\OrdonnanceRepository;
@@ -55,10 +56,19 @@ class DefaultController
 
     }
 
-    public function __invoke(UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
+    public function __invoke(MediaRepository $mediaRepository,UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
     {
        // dd();
-        if ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
+        if ($request->attributes->get('_api_resource_class') === "App\Entity\Media"){
+            $entity = $mediaRepository->find($request->attributes->get('id'));
+
+            $file = $request->files->get('file');
+           // dd($file);
+            if ($file)
+                $entity->setFilePath($fileUploader->upload($file));
+
+        }
+        elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
             $entity = $patientRepository->find($request->attributes->get('id'));
 
             $pieceIdRecto = $request->files->get('pieceIdRecto');
@@ -711,8 +721,6 @@ class DefaultController
         );
     }
 
-
-
         $response->setContent(json_encode([
             'status' => 200,
             /*'patients' => $arrayPatient,
@@ -720,16 +728,16 @@ class DefaultController
             'affections' => $arrayAffection,*/
             'assurances' => $arrayAssurance,
             'services' => $arrayService,
-            'typeServices' => $arrayTypeService,
-           /* 'typeMedecins' => $arrayTypeMedecin,
-            'typeFichiers' => $arrayTypeFichier,
-            'ordonnance' => $arrayOrdonnance,
-            'medicament' => $arrayMedicament,
-            'pageCarnets' => $arrayPageCarnet,
-            'fichierFichierMedicaments' => $arrayFichierMedical,
-            'medecins' => $arrayMedecin,
-            'factures' => $arrayFacture,
-            'familles' => $arrayFamille*/
+            /* 'typeServices' => $arrayTypeService,
+           * 'typeMedecins' => $arrayTypeMedecin,
+             'typeFichiers' => $arrayTypeFichier,
+             'ordonnance' => $arrayOrdonnance,
+             'medicament' => $arrayMedicament,
+             'pageCarnets' => $arrayPageCarnet,
+             'fichierFichierMedicaments' => $arrayFichierMedical,
+             'medecins' => $arrayMedecin,
+             'factures' => $arrayFacture,
+             'familles' => $arrayFamille*/
         ]));
 
         $response->headers->set('Content-Type', 'application/json');

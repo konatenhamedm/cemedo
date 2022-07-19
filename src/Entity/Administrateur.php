@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     *      normalizationContext={
+ *     normalizationContext={
  *      "groups"= {"admin_read"}
  *          },
  *   collectionOperations={

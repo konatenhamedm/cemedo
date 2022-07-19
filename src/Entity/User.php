@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({"user" = "User", "medecin" = "Medecin","administrateur" = "Administrateur",
- *     "infirmier" = "Infirmier","pharmacien" = "Pharmacien","gerant" = "Gerant"})
+ *     "infirmier" = "Infirmier","pharmacien" = "Pharmacien","gerant" = "Gerant","responsableAssurance"="ResponsableAssurance"})
  * @UniqueEntity("tel",message="Un utilisateur ayant ce numero de telephone existe déja")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
