@@ -15,6 +15,7 @@
          $data['nom'] = $user->getNom();
          $data['prenoms'] = $user->getPrenoms();
          $data['tel'] = $user->getTel();
+         $data['email'] = $user->getEmail();
          $data['status'] = 200;
          $event->setData($data);
       //dd($event->getData());
