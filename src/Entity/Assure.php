@@ -77,13 +77,13 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $assurance;
 
     /**
-     * @Groups({"assures_read"})
+     *
      * @ORM\OneToMany(targetEntity=Ordonnance::class, mappedBy="assure")
      */
     private $ordonnances;
 
     /**
-     * @Groups({"assures_read"})
+     *
      * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="concerne")
      */
     private $rendezVouses;
@@ -175,7 +175,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="assure")
-     * @Groups({"assures_read"})
+     *
      */
     private $factures;
 
@@ -199,13 +199,13 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Livraison::class, mappedBy="assure")
-     * @Groups({"assures_read"})
+     *
      */
     private $livraisons;
 
     /**
      * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="assure")
-     * @Groups({"assures_read"})
+     *
      */
     private $notifications;
 
