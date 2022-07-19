@@ -11,7 +11,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *   collectionOperations={
  *     "GET",
- *     "POST",
  *     "post" = {
  *     "path"="/pharmaciens/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
@@ -53,7 +52,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
- *     itemOperations={"GET", "DELETE","PUT","POST"},
  *     denormalizationContext={"disable_type_enforcement"=true}
  * )
  * @ORM\Entity(repositoryClass=PharmacienRepository::class)

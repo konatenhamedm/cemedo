@@ -697,12 +697,12 @@ class DefaultController
 
         $response->setContent(json_encode([
             'status' => 200,
-            'patients' => $arrayPatient,
+            /*'patients' => $arrayPatient,
             'adresses' => $arrayAdresse,
-            'affections' => $arrayAffection,
+            'affections' => $arrayAffection,*/
             'assurances' => $arrayAssurance,
             'services' => $arrayService,
-            'typeServices' => $arrayTypeService,
+            /*'typeServices' => $arrayTypeService,
             'typeMedecins' => $arrayTypeMedecin,
             'typeFichiers' => $arrayTypeFichier,
             'ordonnance' => $arrayOrdonnance,
@@ -711,7 +711,7 @@ class DefaultController
             'fichierFichierMedicaments' => $arrayFichierMedical,
             'medecins' => $arrayMedecin,
             'factures' => $arrayFacture,
-            'familles' => $arrayFamille
+            'familles' => $arrayFamille*/
         ]));
 
         $response->headers->set('Content-Type', 'application/json');

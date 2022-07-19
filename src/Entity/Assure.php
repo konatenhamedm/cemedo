@@ -60,7 +60,7 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read","customers_read","invoices_read"})
+     * @Groups({"assures_read"})
      */
     private $nom;
 
@@ -136,7 +136,6 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"assures_read"})
      */
     private $lieuHabitation;
-
 
     /**
      * @ORM\Column(type="date", nullable=true)
