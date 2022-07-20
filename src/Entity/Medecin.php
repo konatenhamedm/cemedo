@@ -7,7 +7,9 @@ use App\Repository\MedecinRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource(
@@ -58,7 +60,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *   },
  *     itemOperations={"GET"={"path"="/medecins/{id}/update"},"PUT","DELETE"},
- *     denormalizationContext={"disable_type_enforcement"=true}
+ *     denormalizationContext={"disable_type_enforcement"=true,"groups"= {"write"}}
+ *
  * )
  * @ORM\Entity(repositoryClass=MedecinRepository::class)
  */
@@ -111,6 +114,32 @@ class Medecin extends User
      * @Groups({"users_read","medecins_read","assures_read"})
      */
     private $photoMedecin;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="products",fileNameProperty="photoMedecin")
+     * @Groups({"write"})
+     */
+    private $file ;
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     *
+     * @param File|null $file
+     * @return Medecin
+     */
+    public function setFile(?File $file): Medecin
+    {
+        $this->file = $file;
+        return $this;
+    }
 
     public function __construct()
     {

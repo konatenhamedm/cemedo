@@ -65,6 +65,8 @@ class Media
      */
     private $file ;
 
+
+
     /**
      * Media constructor.
      */
