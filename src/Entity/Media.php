@@ -20,7 +20,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     "get",
  *     "post",
  *     "image" = {
- *       "method"="PUT",
+ *       "method"="POST",
  *       "path"="/medias/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "openapi_context" = {
@@ -64,6 +64,16 @@ class Media
      * @Groups({"write","read"})
      */
     private $file ;
+
+    /**
+     * Media constructor.
+     */
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->active = true;
+        $this->updatedAt = new \DateTime();
+    }
 
     /**
      * @return File|null
@@ -116,6 +126,8 @@ class Media
      * @Groups({"write","read"})
      */
     private $titre;
+
+
 
     public function getId(): ?int
     {

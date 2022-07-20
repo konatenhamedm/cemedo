@@ -62,13 +62,13 @@ class DefaultController
        // dd();
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Media"){
             $entity = $mediaRepository->find($request->attributes->get('id'));
-
+/*
             $file = $request->files->get('file');
 
             if ($file)
                 $entity->setFile($request->files->get('file'));
             if($request->request->get('titre'))
-                $entity->setTitre($request->request->get('titre'));
+                $entity->setTitre($request->request->get('titre'));*/
 
         }
         elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
