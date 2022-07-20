@@ -6,18 +6,19 @@ use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use ApiPlatform\Core\Util\RequestAttributesExtractor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class DeserializerListener {
     private $decorated;
     private $contextBuilder;
-    private $denormalizable;
-    public function __construct(DenormalizerInterface $denormalizable, DecoratedListener $decorated,SerializerContextBuilderInterface $contextBuilder)
+    private $denormalizer;
+    public function __construct(DenormalizerInterface $denormalizer, DecoratedListener $decorated,SerializerContextBuilderInterface $contextBuilder)
     {
      $this->decorated = $decorated;
      $this->contextBuilder = $contextBuilder;
-     $this->denormalizable = $denormalizable;
+     $this->denormalizer = $denormalizer;
     }
 
     public function onKernelRequest(RequestEvent $event):void
@@ -50,9 +51,13 @@ class DeserializerListener {
     $files = $request->files->all();
     //dd(array_merge($data, $files));
         //dd($files);
-    $object = $this->denormalizable->denormalize(
-        array_merge($data, $files),$attributes['resource_class'],null,$context
-    );
+        try {
+            $object = $this->denormalizer->denormalize(
+                array_merge($data, $files), $attributes['resource_class'], null, $context
+            );
+        } catch (ExceptionInterface $e) {
+        }
+       // $populated->setTitre('jjjjj');
    $request->attributes->set('data',$object);
     }
 

@@ -20,7 +20,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     "get",
  *     "post",
  *     "image" = {
- *       "method"="POST",
+ *       "method"="PUT",
  *       "path"="/medias/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "openapi_context" = {
