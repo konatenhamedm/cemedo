@@ -152,7 +152,7 @@ class Medecin extends User
         return $this->photoMedecin;
     }
 
-    public function setPhoto(string $photo): self
+    public function setPhoto(?string $photo): self
     {
         $this->photoMedecin = $photo;
 
