@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * @Vich\Uploadable()
  * @ApiResource(
  *    normalizationContext={
  *      "groups"= {"medecins_read"}
