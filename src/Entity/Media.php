@@ -6,19 +6,22 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=MediaRepository::class)
+ * @Vich\Uploadable()
  * * @ApiResource(
- *   normalizationContext={"groups" = {"read"}},
+ *   normalizationContext={"groups"= {"read"}},
+ *     denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
- *     "get","post"
+ *     "get","post",
  *     "image" = {
  *       "method"="POST",
  *       "path"="/medias/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
- *       "deserialize" = false,
  *       "openapi_context" = {
  *         "requestBody" = {
  *           "description" = "File Upload",
@@ -49,20 +52,39 @@ class Media
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"write","read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @ApiProperty(
-     *   iri="http://schema.org/image",
-     *   attributes={
-     *     "openapi_context"={
-     *       "type"="string",
-     *     }
-     *   }
-     * )
-     * @Groups({"read"})
+     * @var File|null
+     * @Vich\UploadableField(mapping="products",fileNameProperty="filePath")
+     * @Groups({"write","read"})
+     */
+    private $file ;
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     *
+     * @param File|null $file
+     * @return Media
+     */
+    public function setFile(?File $file): Media
+    {
+         $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"write","read"})
      */
     private $filePath;
 
@@ -73,6 +95,7 @@ class Media
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"write","read"})
      */
     private $updatedAt;
 
@@ -86,6 +109,12 @@ class Media
      */
     private $version;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"write"})
+     */
+    private $titre;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,7 +125,7 @@ class Media
         return $this->filePath;
     }
 
-    public function setFilePath(string $filePath): self
+    public function setFilePath(?string $filePath): self
     {
         $this->filePath = $filePath;
 
@@ -147,6 +176,18 @@ class Media
     public function setVersion(int $version): self
     {
         $this->version = $version;
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): self
+    {
+        $this->titre = $titre;
 
         return $this;
     }

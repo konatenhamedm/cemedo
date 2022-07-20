@@ -41,3 +41,8 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: [controller.service_arguments]
+    App\Events\DeserializerListener:
+        tags:
+           - {name: 'kernel.event_listener',event: 'kernel.request',method: 'onKernelRequest' ,priority: 2}
+        decorates: 'api_platform.listener.request.deserialize'
+        autoconfigure: false

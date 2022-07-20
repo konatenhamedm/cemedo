@@ -64,9 +64,11 @@ class DefaultController
             $entity = $mediaRepository->find($request->attributes->get('id'));
 
             $file = $request->files->get('file');
-           // dd($file);
+
             if ($file)
-                $entity->setFilePath($fileUploader->upload($file));
+                $entity->setFile($request->files->get('file'));
+            if($request->request->get('titre'))
+                $entity->setTitre($request->request->get('titre'));
 
         }
         elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
