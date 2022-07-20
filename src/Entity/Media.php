@@ -113,7 +113,7 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"write"})
+     * @Groups({"write","read"})
      */
     private $titre;
 

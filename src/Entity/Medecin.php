@@ -57,7 +57,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
- *     itemOperations={"get", "delete","put"},
+ *     itemOperations={"GET"={"path"="/medecins/{id}/update"},"PUT","DELETE"},
  *     denormalizationContext={"disable_type_enforcement"=true}
  * )
  * @ORM\Entity(repositoryClass=MedecinRepository::class)
