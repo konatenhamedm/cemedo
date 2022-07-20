@@ -17,7 +17,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *   normalizationContext={"groups"= {"read"}},
  *     denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
- *     "get","post",
+ *     "get",
+ *     "post",
  *     "image" = {
  *       "method"="POST",
  *       "path"="/medias/{id}/update",
@@ -44,6 +45,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *       },
  *     },
  *   },
+ *     itemOperations={"GET"={"path"="/medias/{id}/update"},"PUT","DELETE"},
  * )
  */
 class Media
