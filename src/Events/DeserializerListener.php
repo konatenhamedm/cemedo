@@ -55,10 +55,11 @@ class DeserializerListener {
             $object = $this->denormalizer->denormalize(
                 array_merge($data, $files), $attributes['resource_class'], null, $context
             );
+            $request->attributes->set('data',$object);
         } catch (ExceptionInterface $e) {
         }
        // $populated->setTitre('jjjjj');
-   $request->attributes->set('data',$object);
+ 
     }
 
 }
