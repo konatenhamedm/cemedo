@@ -163,9 +163,9 @@ class DefaultController
             }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\Medecin"){
 
                 if ($request->request->get("primeMedecin"))
-                    $entity->setPrimeMedecin($request->request->get("primeMedecin"));
+                    $entity->setPrimeMedecin(floatval($request->request->get("primeMedecin")));
                 if ($request->request->get("salaireMedecin"))
-                    $entity->setSalaireMedecin($request->request->get("salaireMedecin"));
+                    $entity->setSalaireMedecin(floatval($request->request->get("salaireMedecin")));
                 if ($request->request->get("specialiteMedecin"))
                     $entity->setSepecialiteMedecin($request->request->get("specialiteMedecin"));
                 if ($request->request->get("typeMedecin"))
