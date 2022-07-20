@@ -8,6 +8,7 @@ use App\Entity\Assure;
 use App\Entity\Gerant;
 use App\Entity\Infirmier;
 use App\Entity\Medecin;
+use App\Entity\Media;
 use App\Entity\Medicament;
 use App\Entity\Patient;
 use App\Entity\Pharmacien;
@@ -743,5 +744,11 @@ class DefaultController
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+    /*
+     * @Route("cemedo/medias/{id}/update",name="get_media", methods={"get"})
+     */
+    public function getMedia($id,Media $media){
+        dd($media);
     }
 }

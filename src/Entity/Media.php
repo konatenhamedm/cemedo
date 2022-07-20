@@ -13,8 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * * @ApiResource(
  *   normalizationContext={"groups" = {"read"}},
  *   collectionOperations={
- *     "get",
- *     "post" = {
+ *     "get","post"
+ *     "image" = {
+ *       "method"="POST",
  *       "path"="/medias/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "deserialize" = false,
