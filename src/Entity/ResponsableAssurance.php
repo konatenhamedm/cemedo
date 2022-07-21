@@ -12,5 +12,20 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ResponsableAssurance extends User
 {
+    /**
+     * @ORM\ManyToOne(targetEntity=Assurance::class, inversedBy="responsableAssurances")
+     */
+    private $assurance;
 
+    public function getAssurance(): ?Assurance
+    {
+        return $this->assurance;
+    }
+
+    public function setAssurance(?Assurance $assurance): self
+    {
+        $this->assurance = $assurance;
+
+        return $this;
+    }
 }

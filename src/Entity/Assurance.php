@@ -80,6 +80,11 @@ class Assurance
      */
     private $contact;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ResponsableAssurance::class, mappedBy="assurance")
+     */
+    private $responsableAssurances;
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -132,6 +137,7 @@ class Assurance
     public function __construct()
     {
         $this->assures = new ArrayCollection();
+        $this->responsableAssurances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -213,6 +219,36 @@ class Assurance
     public function setContact(string $contact): self
     {
         $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ResponsableAssurance>
+     */
+    public function getResponsableAssurances(): Collection
+    {
+        return $this->responsableAssurances;
+    }
+
+    public function addResponsableAssurance(ResponsableAssurance $responsableAssurance): self
+    {
+        if (!$this->responsableAssurances->contains($responsableAssurance)) {
+            $this->responsableAssurances[] = $responsableAssurance;
+            $responsableAssurance->setAssurance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponsableAssurance(ResponsableAssurance $responsableAssurance): self
+    {
+        if ($this->responsableAssurances->removeElement($responsableAssurance)) {
+            // set the owning side to null (unless already changed)
+            if ($responsableAssurance->getAssurance() === $this) {
+                $responsableAssurance->setAssurance(null);
+            }
+        }
 
         return $this;
     }

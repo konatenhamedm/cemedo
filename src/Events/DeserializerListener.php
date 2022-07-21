@@ -13,12 +13,12 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class DeserializerListener {
     private $decorated;
     private $contextBuilder;
-    private $denormalizer;
-    public function __construct(DenormalizerInterface $denormalizer, DecoratedListener $decorated,SerializerContextBuilderInterface $contextBuilder)
+    private $denormalize;
+    public function __construct(DenormalizerInterface $denormalize, DecoratedListener $decorated, SerializerContextBuilderInterface $contextBuilder)
     {
      $this->decorated = $decorated;
      $this->contextBuilder = $contextBuilder;
-     $this->denormalizer = $denormalizer;
+     $this->denormalize = $denormalize;
     }
 
     public function onKernelRequest(RequestEvent $event):void
@@ -42,22 +42,23 @@ class DeserializerListener {
     }
     $context = $this->contextBuilder->createFromRequest($request,false,$attributes);
     $populated = $request->attributes->get('data');
-
+        //dd($populated);
     if ($populated != null){
-        $context['object_to_populate']= $populated;
+        $context['object_to_populate'] = $populated;
     }
     $data = $request->request->all();
-
+       // dd($data);
     $files = $request->files->all();
     //dd(array_merge($data, $files));
-        //dd($files);
-        try {
-            $object = $this->denormalizer->denormalize(
+        //dd($attributes['resource_class']);
+
+            $object = $this->denormalize->denormalize(
                 array_merge($data, $files), $attributes['resource_class'], null, $context
             );
+
+
             $request->attributes->set('data',$object);
-        } catch (ExceptionInterface $e) {
-        }
+
        // $populated->setTitre('jjjjj');
 
     }

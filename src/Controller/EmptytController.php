@@ -6,8 +6,8 @@ namespace App\Controller;
 
 class EmptytController
 {
-/*public function __invoke($data)
+public function __invoke($data)
 {
     return $data;
-}*/
+}
 }

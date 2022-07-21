@@ -19,8 +19,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *   collectionOperations={
  *     "get",
  *     "post",
+ *   },
+ *     itemOperations={"GET"={"path"="/medias/{id}/update"},
  *     "image" = {
- *       "method"="POST",
+ *       "method"="post",
  *       "path"="/medias/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "openapi_context" = {
@@ -44,8 +46,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         },
  *       },
  *     },
- *   },
- *     itemOperations={"GET"={"path"="/medias/{id}/update"},"PUT","DELETE"},
+ *     "DELETE"},
  * )
  */
 class Media
@@ -61,7 +62,7 @@ class Media
     /**
      * @var File|null
      * @Vich\UploadableField(mapping="products",fileNameProperty="filePath")
-     * @Groups({"write","read"})
+     * @Groups({"write"})
      */
     private $file ;
 
@@ -98,7 +99,7 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"write","read"})
+     *
      */
     private $filePath;
 
