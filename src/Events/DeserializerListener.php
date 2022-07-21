@@ -56,7 +56,7 @@ class DeserializerListener {
                 array_merge($data, $files), $attributes['resource_class'], null, $context
             );
 
-
+//dd($object);
             $request->attributes->set('data',$object);
 
        // $populated->setTitre('jjjjj');

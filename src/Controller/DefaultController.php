@@ -63,12 +63,9 @@ class DefaultController
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Media"){
             $entity = $mediaRepository->find($request->attributes->get('id'));
 
- /*           $file = $request->files->get('file');
-
-            if ($file)
-                $entity->setFile($request->files->get('file'));*/
-
-
+          //$file = $request->files->get('file');
+            if ($request->request->get("titre"))
+                $entity->setTitre($request->request->get("titre"));
         }
         elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
             $entity = $patientRepository->find($request->attributes->get('id'));
@@ -130,15 +127,15 @@ class DefaultController
         }
         else{
             $entity = $repository->find($request->attributes->get('id'));
-            $photo = $request->files->get('photo');
+            //dd($entity);
+            //$photo = $request->files->get('photo');
 //dd($photo);
             if ($request->request->get("password"))
                 $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
             // dd($entity);
             if ($request->request->get("password"))
                 $entity->setPassword($hashs);
-            if ($photo)
-                $entity->setPhoto($fileUploader->upload($photo));
+
             if ($request->request->get("nom"))
                 $entity->setNom($request->request->get("nom"));
             if ($request->request->get("prenoms"))

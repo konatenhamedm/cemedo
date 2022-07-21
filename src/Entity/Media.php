@@ -13,7 +13,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity(repositoryClass=MediaRepository::class)
  * @Vich\Uploadable()
- * * @ApiResource(
+ *  @ApiResource(
  *   normalizationContext={"groups"= {"read"}},
  *     denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={

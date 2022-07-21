@@ -12,45 +12,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * @ORM\Entity(repositoryClass=MedecinRepository::class)
  * @Vich\Uploadable()
- * @ApiResource(
- *    normalizationContext={
- *      "groups"= {"medecins_read"}
- *          },
+ *@ApiResource(
+ *   normalizationContext={"groups"= {"read"}},
+ *     denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
  *     "get",
- *     "post" = {
- *     "path"="/medecins/{id}/update",
+ *     "post",
+ *   },
+ *     itemOperations={"GET"={"path"="/medecins/{id}/update"},
+ *     "image_medecin" = {
+ *       "method"="post",
+ *       "path"="/medecins/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
- *       "deserialize" = false,
- *        "openapi_context" = {
+ *       "openapi_context" = {
  *         "requestBody" = {
- *           "description" = "File upload to an existing resource (superheroes)",
+ *           "description" = "File Upload",
  *           "required" = true,
  *           "content" = {
  *             "multipart/form-data" = {
  *               "schema" = {
  *                 "type" = "object",
  *                 "properties" = {
- *                   "password" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                   "tel" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                   "pieceIdRecto" = {
+ *                   "file" = {
  *                     "type" = "string",
  *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
- *                   },
- *                    "pieceIdVerso" = {
- *                     "type" = "string",
- *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
+ *                     "description" = "File to be uploaded",
  *                   },
  *                 },
  *               },
@@ -59,18 +47,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         },
  *       },
  *     },
- *   },
- *     itemOperations={"GET"={"path"="/medecins/{id}/update"},"PUT","DELETE"},
- *     denormalizationContext={"disable_type_enforcement"=true,"groups"= {"write"}}
- *
+ *     "DELETE"},
  * )
- * @ORM\Entity(repositoryClass=MedecinRepository::class)
  */
 class Medecin extends User
 {
     /**
-     * @ORM\Column(type="float")
-     *  @Groups({"medecins_read","assures_read"})
+     * @ORM\Column(type="float" ,nullable=true)
+     *  @Groups({"medecins_read","assures_read","read"})
      */
     private $salaireMedecin;
 
@@ -82,46 +66,60 @@ class Medecin extends User
 
     /**
      * @ORM\ManyToOne(targetEntity=TypeMedecin::class, inversedBy="medecins")
-     * @Groups({"medecins_read","assures_read"})
+     * @Groups({"medecins_read","assures_read","write","read"})
      */
     private $typeMedecin;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"medecins_read","assures_read"})
+     * @Groups({"medecins_read","assures_read","write"})
      */
     private $specialiteMedecin;
 
     /**
-     * @ORM\Column(type="float")
-     * @Groups({"medecins_read","assures_read"})
+     * @ORM\Column(type="float" ,nullable=true)
+     * @Groups({"medecins_read","assures_read","read"})
      */
     private $primeMedecin;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"medecins_read","assures_read"})
+     * @Groups({"medecins_read","assures_read","write","read"})
      */
     private $heureDebut;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"medecins_read","assures_read"})
+     * @Groups({"medecins_read","assures_read","write","read"})
      */
     private $heureFin;
 
+
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"users_read","medecins_read","assures_read"})
+     * @Groups({"medecins_read","assures_read","read"})
      */
     private $photoMedecin;
 
+
+    public function getPhotoMedecin(): ?string
+    {
+        return $this->photoMedecin;
+    }
+
+    public function setPhotoMedecin(?string $photoMedecin): self
+    {
+        $this->photoMedecin = $photoMedecin;
+
+        return $this;
+    }
     /**
      * @var File|null
-     * @Vich\UploadableField(mapping="products",fileNameProperty="photoMedecin")
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="photoMedecin")
      * @Groups({"write"})
      */
     private $file ;
+
 
     /**
      * @return File|null
@@ -145,18 +143,6 @@ class Medecin extends User
     public function __construct()
     {
         $this->rendezVouses = new ArrayCollection();
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photoMedecin;
-    }
-
-    public function setPhoto(?string $photo): self
-    {
-        $this->photoMedecin = $photo;
-
-        return $this;
     }
 
 
@@ -261,4 +247,6 @@ class Medecin extends User
 
         return $this;
     }
+
+
 }
