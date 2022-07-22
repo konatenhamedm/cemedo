@@ -63,8 +63,10 @@ class DefaultController
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Media"){
             $entity = $mediaRepository->find($request->attributes->get('id'));
 
-          //$file = $request->files->get('file');
-            $entity->setFile($request->files->get('file'));
+            //$file = $request->files->get('file');
+
+            if($request->files->get('file'))
+                $entity->setFile($request->files->get('file'));
             if ($request->request->get("titre"))
                 $entity->setTitre($request->request->get("titre"));
         }
@@ -158,6 +160,9 @@ class DefaultController
                 if ($request->request->get("salaireInfirmier"))
                     $entity->setSalaireInfirmier($request->request->get("salaireInfirmier"));
             }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\Medecin"){
+
+                if($request->files->get('file'))
+                    $entity->setFile($request->files->get('file'));
 
                 if ($request->request->get("primeMedecin"))
                     $entity->setPrimeMedecin(floatval($request->request->get("primeMedecin")));

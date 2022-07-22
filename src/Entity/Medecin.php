@@ -15,14 +15,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass=MedecinRepository::class)
  * @Vich\Uploadable()
  *@ApiResource(
- *   normalizationContext={"groups"= {"read"}},
+ *   normalizationContext={"groups"= {"medecins_read"}},
  *     denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
  *     "get",
- *     "post",
- *   },
- *     itemOperations={"GET"={"path"="/medecins/{id}/update"},
- *     "image_medecin" = {
+ *  "image_medecin" = {
  *       "method"="post",
  *       "path"="/medecins/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
@@ -47,6 +44,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         },
  *       },
  *     },
+ *   },
+ *     itemOperations={"GET"={"path"="/medecins/{id}/update"},
  *     "DELETE"},
  * )
  */
@@ -97,7 +96,7 @@ class Medecin extends User
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"medecins_read","assures_read","read"})
+     * @Groups({"medecins_read","assures_read"})
      */
     private $photoMedecin;
 
