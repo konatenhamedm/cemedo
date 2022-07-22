@@ -28,7 +28,7 @@ class DeserializerListener {
            return;
        }
       // dd($request->getContentType());
-       if($request->getContentType() === 'form' || $request->getContentType() === 'multipart'){
+       if($request->getContentType() === 'form' || $request->getContentType() === 'multipart' || $request->getContentType() === 'x-www-form-urlencoded'){
           $this->denormalizerFromRequest($request);
        }else{
            $this->decorated->onKernelRequest($event);

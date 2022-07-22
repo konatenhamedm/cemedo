@@ -5,44 +5,33 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\InfirmierRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ApiResource(
+ * @Vich\Uploadable()
+ *@ApiResource(
+ *      denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
  *     "get",
- *     "post" = {
- *     "path"="/infirmier/{id}/update",
+ *  "image_infirmier" = {
+ *       "method"="post",
+ *       "path"="/infirmiers/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
- *       "deserialize" = false,
- *        "openapi_context" = {
+ *       "openapi_context" = {
  *         "requestBody" = {
- *           "description" = "File upload to an existing resource (superheroes)",
+ *           "description" = "File Upload",
  *           "required" = true,
  *           "content" = {
  *             "multipart/form-data" = {
  *               "schema" = {
  *                 "type" = "object",
  *                 "properties" = {
- *                   "password" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                   "tel" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                   "pieceIdRecto" = {
+ *                   "file" = {
  *                     "type" = "string",
  *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
- *                   },
- *                    "pieceIdVerso" = {
- *                     "type" = "string",
- *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
+ *                     "description" = "File to be uploaded",
  *                   },
  *                 },
  *               },
@@ -52,13 +41,39 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
- *     itemOperations={"get", "delete","put"},
- *     denormalizationContext={"disable_type_enforcement"=true}
+ *     itemOperations={"GET"={"path"="/infirmiers/{id}/update"},
+ *     "DELETE"},
  * )
  * @ORM\Entity(repositoryClass=InfirmierRepository::class)
  */
 class Infirmier extends User
 {
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="photoInfirmier")
+     * @Groups({"write"})
+     */
+    private $file ;
+
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     *
+     * @param File|null $file
+     * @return Gerant
+     */
+    public function setFile(?File $file): Gerant
+    {
+        $this->file = $file;
+        return $this;
+    }
 
 
     /**
@@ -77,7 +92,7 @@ class Infirmier extends User
         return $this->photoInfirmier;
     }
 
-    public function setPhoto(string $photo): self
+    public function setPhoto(?string $photo): self
     {
         $this->photoInfirmier = $photo;
 

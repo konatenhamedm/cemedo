@@ -11,43 +11,31 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ApiResource(
+ * @Vich\Uploadable()
+ *@ApiResource(
+ *      denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
  *     "get",
- *     "post" = {
- *     "path"="/patients/{id}/update",
+ *  "image_pharmacien" = {
+ *       "method"="post",
+ *       "path"="/pharmaciens/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
- *       "deserialize" = false,
- *        "openapi_context" = {
+ *       "openapi_context" = {
  *         "requestBody" = {
- *           "description" = "File upload to an existing resource (superheroes)",
+ *           "description" = "File Upload",
  *           "required" = true,
  *           "content" = {
  *             "multipart/form-data" = {
  *               "schema" = {
  *                 "type" = "object",
  *                 "properties" = {
- *                   "password" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                   "tel" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                   "pieceIdRecto" = {
+ *                   "file" = {
  *                     "type" = "string",
  *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
- *                   },
- *                    "pieceIdVerso" = {
- *                     "type" = "string",
- *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
+ *                     "description" = "File to be uploaded",
  *                   },
  *                 },
  *               },
@@ -57,8 +45,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
- *     itemOperations={"get", "delete","put"},
- *     denormalizationContext={"disable_type_enforcement"=true}
+ *     itemOperations={"GET"={"path"="/pharmaciens/{id}/update"},
+ *     "DELETE"},
+ *     denormalizationContext={"disable_type_enforcement"=true},
  * )
  * @ORM\Entity(repositoryClass=PatientRepository::class)
  */
@@ -72,18 +61,112 @@ class Patient extends Assure
      */
     private $id;
 
+
+
     /**
-     * @var File null
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="pieceIdRecto")
+     * @Groups({"write"})
+     */
+    private $file ;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="pieceIdVerso")
+     * @Groups({"write"})
+     */
+    private $filePieceVerso ;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="assuranceRecto")
+     * @Groups({"write"})
+     */
+    private $fileAssuranceRecto ;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="assuranceVerso")
+     * @Groups({"write"})
+     */
+    private $fileAssuranceVerso ;
+
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getFilePieceVerso(): ?File
+    {
+        return $this->filePieceVerso;
+    }
+    /**
+     * @return File|null
+     */
+    public function getFileAssuranceRecto(): ?File
+    {
+        return $this->fileAssuranceRecto;
+    }
+    /**
+     * @return File|null
+     */
+    public function getFileAssuranceVerso(): ?File
+    {
+        return $this->fileAssuranceVerso;
+    }
+
+    /**
+     * @param File|null $file
+     * @return Patient
+     */
+    public function setFile(?File $file): Patient
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @param File|null $file
+     * @return Patient
+     */
+    public function setFilePieceVerso(?File $file): Patient
+    {
+        $this->filePieceVerso = $file;
+        return $this;
+    }
+
+    /**
+     * @param File|null $file
+     * @return Patient
+     */
+    public function setFileAssuranceRecto(?File $file): Patient
+    {
+        $this->fileAssuranceVerso = $file;
+        return $this;
+    }
+
+    /**
+     * @param File|null $file
+     * @return Patient
+     */
+    public function setFileAssuranceVerso(?File $file): Patient
+    {
+        $this->fileAssuranceVerso = $file;
+        return $this;
+    }
+
+
+    /**
+     *
      * @Groups({"assures_read","familles_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @ApiProperty(
-     *   iri="http://schema.org/image",
-     *   attributes={
-     *     "openapi_context"={
-     *       "type"="string",
-     *     }
-     *   }
-     * )
      */
     private $pieceIdRecto;
 
