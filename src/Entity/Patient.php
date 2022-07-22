@@ -21,7 +21,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     "get",
  *  "image_pharmacien" = {
  *       "method"="post",
- *       "path"="/pharmaciens/{id}/update",
+ *       "path"="/patients/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
  *       "openapi_context" = {
  *         "requestBody" = {
@@ -45,7 +45,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *       },
  *     },
  *   },
- *     itemOperations={"GET"={"path"="/pharmaciens/{id}/update"},
+ *     itemOperations={"GET"={"path"="/patients/{id}/update"},
  *     "DELETE"},
  *     denormalizationContext={"disable_type_enforcement"=true},
  * )
@@ -229,7 +229,7 @@ class Patient extends Assure
         return $this->assuranceRecto;
     }
 
-    public function setAssuranceRecto(string $assuranceRecto): self
+    public function setAssuranceRecto(?string $assuranceRecto): self
     {
         $this->assuranceRecto = $assuranceRecto;
 
@@ -241,7 +241,7 @@ class Patient extends Assure
         return $this->assuranceVerso;
     }
 
-    public function setAssuranceVerso(string $assuranceVerso): self
+    public function setAssuranceVerso(?string $assuranceVerso): self
     {
         $this->assuranceVerso = $assuranceVerso;
 

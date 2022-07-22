@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Administrateur;
 use App\Entity\Assure;
+use App\Entity\Comptable;
 use App\Entity\Gerant;
 use App\Entity\Infirmier;
 use App\Entity\Medecin;
@@ -82,13 +83,14 @@ class DefaultController
                 $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
 
             if ($pieceIdRecto)
-                $entity->setPieceIdRecto($fileUploader->upload($pieceIdRecto));
+                $entity->setFile($pieceIdRecto);
             if ($pieceIdVerso)
-                $entity->setPieceIdVerso($fileUploader->upload($pieceIdVerso));
+                $entity->setFilePieceVerso($pieceIdVerso);
             if ($assuranceRecto)
-                $entity->setAssuranceRecto($fileUploader->upload($assuranceRecto));
+                $entity->setFileAssuranceRecto($assuranceRecto);
             if ($assuranceVerso)
-                $entity->setAssuranceVerso($fileUploader->upload($assuranceVerso));
+                $entity->setFileAssuranceVerso($assuranceVerso);
+
             if ($request->request->get("tel"))
                 $entity->setTel($request->request->get("tel"));
             if ($request->request->get("tel2"))
@@ -130,9 +132,10 @@ class DefaultController
         }
         else{
             $entity = $repository->find($request->attributes->get('id'));
-            //dd($entity);
-            //$photo = $request->files->get('photo');
-//dd($photo);
+
+            if($request->files->get('file'))
+                $entity->setFile($request->files->get('file'));
+
             if ($request->request->get("password"))
                 $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
             // dd($entity);
@@ -160,10 +163,6 @@ class DefaultController
                 if ($request->request->get("salaireInfirmier"))
                     $entity->setSalaireInfirmier($request->request->get("salaireInfirmier"));
             }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\Medecin"){
-
-                if($request->files->get('file'))
-                    $entity->setFile($request->files->get('file'));
-
                 if ($request->request->get("primeMedecin"))
                     $entity->setPrimeMedecin(floatval($request->request->get("primeMedecin")));
                 if ($request->request->get("salaireMedecin"))
@@ -210,13 +209,13 @@ class DefaultController
         $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
 
         if ($pieceIdRecto)
-            $entity->setPieceIdRecto($fileUploader->upload($pieceIdRecto));
+            $entity->setFile($pieceIdRecto);
         if ($pieceIdVerso)
-            $entity->setPieceIdVerso($fileUploader->upload($pieceIdVerso));
+            $entity->setFilePieceVerso($pieceIdVerso);
         if ($assuranceRecto)
-            $entity->setAssuranceRecto($fileUploader->upload($assuranceRecto));
+            $entity->setFileAssuranceRecto($assuranceRecto);
         if ($assuranceVerso)
-            $entity->setAssuranceVerso($fileUploader->upload($assuranceVerso));
+            $entity->setFileAssuranceVerso($assuranceVerso);
 
         $entity->setTel($request->request->get("tel"));
         $entity->setTel2($request->request->get("tel2"));
@@ -260,7 +259,7 @@ class DefaultController
     public function newAdministrateur(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
-        $photo = $request->files->get('photo');
+        $photo = $request->files->get('file');
         $entity = new Administrateur();
 
         $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
@@ -270,8 +269,10 @@ class DefaultController
         // dd($entity);
         if ($request->request->get("password"))
             $entity->setPassword($hashs);
+
         if ($photo)
-            $entity->setPhoto($fileUploader->upload($photo));
+            $entity->setFile($photo);
+
         if ($request->request->get("nom"))
             $entity->setNom($request->request->get("nom"));
         if ($request->request->get("prenoms"))
@@ -319,7 +320,7 @@ class DefaultController
     public function newGerant(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
-        $photo = $request->files->get('photo');
+        $photo = $request->files->get('file');
         $entity = new Gerant();
 
         $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
@@ -329,8 +330,10 @@ class DefaultController
         // dd($entity);
         if ($request->request->get("password"))
             $entity->setPassword($hashs);
+
         if ($photo)
-            $entity->setPhoto($fileUploader->upload($photo));
+            $entity->setFile($photo);
+
         if ($request->request->get("nom"))
             $entity->setNom($request->request->get("nom"));
         if ($request->request->get("prenoms"))
@@ -367,6 +370,66 @@ class DefaultController
 
     }
 
+    /**
+     * @Route("/cemedo/comptables", name="comptable", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newComptable(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    {
+        $response = new Response();
+        $photo = $request->files->get('file');
+        $entity = new Comptable();
+
+        $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+
+        if ($request->request->get("password"))
+            $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
+        // dd($entity);
+        if ($request->request->get("password"))
+            $entity->setPassword($hashs);
+
+        if ($photo)
+            $entity->setFile($photo);
+
+        if ($request->request->get("nom"))
+            $entity->setNom($request->request->get("nom"));
+        if ($request->request->get("prenoms"))
+            $entity->setPrenoms($request->request->get("prenoms"));
+        if ($request->request->get("email"))
+            $entity->setEmail($request->request->get("email"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("dateNaissance"))
+            $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        if ($request->request->get("genre"))
+            $entity->setGenre($request->request->get("genre"));
+        if ($request->request->get("numeroCni"))
+            $entity->setNumeroCni($request->request->get("numeroCni"));
+        if ($request->request->get("residence"))
+            $entity->setResidence($request->request->get("residence"));
+        $entity->setRoles(array("ROLE_COMPTABLE"));
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setUpdatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => "dedicace a mon pote yves"
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
+    }
+
 
     /**
      * @Route("/cemedo/pharmaciens", name="pharmacien", methods={"post"})
@@ -378,7 +441,7 @@ class DefaultController
     public function newPharmacien(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
-        $photo = $request->files->get('photo');
+        $photo = $request->files->get('file');
         $entity = new Pharmacien();
 
         $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
@@ -388,8 +451,10 @@ class DefaultController
         // dd($entity);
         if ($request->request->get("password"))
             $entity->setPassword($hashs);
+
         if ($photo)
-            $entity->setPhoto($fileUploader->upload($photo));
+            $entity->setFile($photo);
+
         if ($request->request->get("nom"))
             $entity->setNom($request->request->get("nom"));
         if ($request->request->get("prenoms"))
@@ -437,7 +502,7 @@ class DefaultController
     public function newInfirmier(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
-        $photo = $request->files->get('photo');
+        $photo = $request->files->get('file');
         $entity = new Infirmier();
 
         $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
@@ -447,8 +512,10 @@ class DefaultController
         // dd($entity);
         if ($request->request->get("password"))
             $entity->setPassword($hashs);
+
         if ($photo)
-            $entity->setPhoto($fileUploader->upload($photo));
+            $entity->setFile($photo);
+
         if ($request->request->get("nom"))
             $entity->setNom($request->request->get("nom"));
         if ($request->request->get("prenoms"))
@@ -497,7 +564,7 @@ class DefaultController
     public function newMedecin(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
     {
         $response = new Response();
-        $photo = $request->files->get('photo');
+        $photo = $request->files->get('file');
         $entity = new Medecin();
 
         $hashs = $this->encoder->hashPassword(new User(), $request->request->get("password"));
@@ -508,7 +575,8 @@ class DefaultController
         if ($request->request->get("password"))
             $entity->setPassword($hashs);
         if ($photo)
-            $entity->setPhoto($fileUploader->upload($photo));
+            $entity->setFile($photo);
+
         if ($request->request->get("nom"))
             $entity->setNom($request->request->get("nom"));
         if ($request->request->get("prenoms"))
