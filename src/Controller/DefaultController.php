@@ -64,6 +64,7 @@ class DefaultController
             $entity = $mediaRepository->find($request->attributes->get('id'));
 
           //$file = $request->files->get('file');
+            $entity->setFile($request->files->get('file'));
             if ($request->request->get("titre"))
                 $entity->setTitre($request->request->get("titre"));
         }

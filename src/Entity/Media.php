@@ -60,7 +60,7 @@ class Media
 
     /**
      * @var File|null
-     * @Vich\UploadableField(mapping="products",fileNameProperty="filePath")
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="filePath")
      * @Groups({"write"})
      */
     private $file ;
@@ -98,7 +98,7 @@ class Media
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     *
+     *@Groups({"read"})
      */
     private $filePath;
 
