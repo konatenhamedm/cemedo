@@ -16,6 +16,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @Vich\Uploadable()
  *@ApiResource(
+ *     normalizationContext={"groups"= {"patient_read"}},
  *      denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
  *     "get",
@@ -57,7 +58,7 @@ class Patient extends Assure
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read","familles_read"})
+     * @Groups({"assures_read","familles_read","patient_read"})
      */
     private $id;
 
@@ -148,7 +149,7 @@ class Patient extends Assure
      */
     public function setFileAssuranceRecto(?File $file): Patient
     {
-        $this->fileAssuranceVerso = $file;
+        $this->fileAssuranceRecto = $file;
         return $this;
     }
 
@@ -167,24 +168,25 @@ class Patient extends Assure
      *
      * @Groups({"assures_read","familles_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"assures_read","familles_read","patient_read"})
      */
     private $pieceIdRecto;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"assures_read","familles_read"})
+     * @Groups({"assures_read","familles_read","patient_read"})
      */
     private $pieceIdVerso;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"assures_read","familles_read"})
+     * @Groups({"assures_read","familles_read","patient_read"})
      */
     private $assuranceRecto;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"assures_read","familles_read"})
+     * @Groups({"assures_read","familles_read","patient_read"})
      */
     private $assuranceVerso;
 

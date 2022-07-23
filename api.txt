@@ -1,0 +1,135 @@
+Les api avec leurs differents champs
+
+Patient(pour un put,executer l'api qui a un update en respectant le verbe post exemple===
+ 
+axios.post('https://127.0.0.1:8000/cemedo/patients/1/update',data,
+{
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Cookie':'sf_redirect=%7B%22token%22%3A%22503bee%22%2C%22route%22%3A%22api_medecins_image_medecin_collection%22%2C%22method%22%3A%22POST%22%2C%22controller%22%3A%22App%5C%5CController%5C%5CDefaultController%22%2C%22status_code%22%3A201%2C%22status_text%22%3A%22Created%22%7D; path=/; secure; httponly; samesite=lax',
+  },
+    credentials: 'include',
+    })
+    .then(response => { 
+	console.log(response)
+})
+.catch(error => {
+    console.log(error.response)
+});
+
+)
+
+
+-pour faire un put utilisez cette api en post avec multipart/form-data
+
+
+ var data ={
+  "nom": "FANGOROUA",
+  "prenoms":"Hamed",
+  "email": "user@epppxample.com",
+  "assurance": "1",
+   "password":"achis",
+   "tel":"5555555",
+   "tel2": "00002",
+  "sexe": "F",
+  "fcmtoken": "string",
+  "tauxCouverture": 8,
+  "autreAntecedent": "string",
+  "numeroAssure": "string",
+  "lieuHabitation": "string",
+ "profession": "string",
+  "dateNaissance": "2022-07-20",
+  "assuranceRecto":imagefile3.files[0],
+  "assuranceVerso": imagefile4.files[0],
+   "pieceIdRecto":imagefile.files[0],
+   "pieceIdVerso":imagefile2.files[0],
+   "assurance":"/cemedo/assurances/2"
+ }
+
+MembreFamille
+
+ var data ={
+  "nom": "FANGOROUA",
+  "prenoms":"Hamed",
+  "email": "user@epppxample.com",
+  "assurance": "1",
+   "password":"achis",
+   "tel":"5555555",
+   "tel2": "00002",
+  "sexe": "F",
+  "fcmtoken": "string",
+  "tauxCouverture": 8,
+  "autreAntecedent": "string",
+  "numeroAssure": "string",
+  "lieuHabitation": "string",
+"profession": "string",
+  "dateNaissance": "2022-07-20",
+   "assurance":"/cemedo/assurances/1"(Pour un update ,donné toute cette chaine "/cemedo/assurances/1" assurance mais
+ pour creer un nouveau patient ,vous donnez que l'index a assurance c'est a dire 1)
+
+NB:Et ces pareil pour toutes les tables que j'ai cité dans cette liste)
+ )
+ }
+
+
+Administrateur,GERANT,COMPTABLE,RESPONSABLEASSURANCE,PHARMACIEN,
+
+
+ var data={
+  "nom":"Konate",
+	 "prenoms":"Seydou",
+   "email":"seydoudd@gmail.com",
+	 "password":"achi",
+	 "genre":"M",
+	 "tel":"014088052",
+	 "dateNaissance":"2021-05-05",
+	"file":imagefile.files[0],
+	"numeroCni":"DALOA",
+	"file":imagefile2.files[0]
+ };
+
+INFIRMIER
+
+ var data={
+  "nom":"Konate",
+	 "prenoms":"Seydou",
+   "email":"seydoudd@gmail.com",
+	 "password":"achi",
+	 "genre":"M",
+	 "tel":"014088052",
+	 "dateNaissance":"2021-05-05",
+	"file":imagefile.files[0],
+	"numeroCni":"DALOA",
+"salaireInfirmier":07000,
+	"file":imagefile2.files[0]
+ };
+
+MEDECIN
+
+var data={
+  "nom":"Konate",
+	 "prenoms":"Seydou",
+   "email":"seydoudd@gmail.com",
+	 "password":"achi",
+	 "genre":"M",
+	 "tel":"014088052",
+	 "dateNaissance":"2021-05-05",
+	"file":imagefile.files[0],
+	"numeroCni":"DALOA",
+	"residence":"07017",
+  "salaireMedecin":07000,
+  "typeMedecin":"/cemedo/type_medecins/1",
+  "specialiteMedecin":"07017",
+  "primeMedecin":07000,
+  "heureDebut":"2021-05-05",
+  "heureFin":"2021-05-05"
+ };
+
+PAGE_CARNET_SANTE
+
+var data={
+  "file":imagefile.files[0]
+	
+ };
+
+ 

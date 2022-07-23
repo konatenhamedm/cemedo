@@ -3,6 +3,7 @@
 namespace App\Serializer;
 
 use App\Entity\Administrateur;
+use App\Entity\Comptable;
 use App\Entity\Gerant;
 use App\Entity\Infirmier;
 use App\Entity\Medecin;
@@ -27,7 +28,7 @@ final class SerializerUser implements ContextAwareNormalizerInterface, Normalize
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool {
         return !isset($context[self::ALREADY_CALLED]) && ($data instanceof Administrateur || $data instanceof Infirmier || $data instanceof Pharmacien
-            || $data instanceof Gerant);
+            || $data instanceof Gerant || $data instanceof Comptable);
     }
 
     public function normalize($object, ?string $format = null, array $context = []) {

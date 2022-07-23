@@ -26,7 +26,7 @@ final class SerializerMedecin implements ContextAwareNormalizerInterface, Normal
     public function normalize($object, ?string $format = null, array $context = []) {
         $context[self::ALREADY_CALLED] = true;
 
-
+         if ($object->getPhotoMedecin())
             $object->setPhotoMedecin($this->fileUploader->getUrl($object->getPhotoMedecin()))  ;
 
         return $this->normalizer->normalize($object, $format, $context);

@@ -6,34 +6,34 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PageCarnetSanteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ApiResource(
+ * @Vich\Uploadable()
+ *@ApiResource(
+ *     normalizationContext={"groups"= {"page_read"}},
+ *      denormalizationContext={"groups"= {"write"}},
  *   collectionOperations={
  *     "get",
- *     "post" = {
- *     "path"="/page_carnet_santes/{id}/update",
+ *  "image_pharmacien" = {
+ *       "method"="post",
+ *       "path"="/page_carnet_santes/{id}/update",
  *       "controller" ="App\Controller\DefaultController",
- *       "deserialize" = false,
- *        "openapi_context" = {
+ *       "openapi_context" = {
  *         "requestBody" = {
- *           "description" = "File upload to an existing resource (superheroes)",
+ *           "description" = "File Upload",
  *           "required" = true,
  *           "content" = {
  *             "multipart/form-data" = {
  *               "schema" = {
  *                 "type" = "object",
  *                 "properties" = {
- *                   "password" = {
- *                     "description" = "The name of the superhero",
- *                     "type" = "string",
- *                     "example" = "Clark Kent",
- *                   },
- *                    "lienFichier" = {
+ *                   "file" = {
  *                     "type" = "string",
  *                     "format" = "binary",
- *                     "description" = "Upload a cover image of the superhero",
+ *                     "description" = "File to be uploaded",
  *                   },
  *                 },
  *               },
@@ -43,8 +43,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       },
  *     },
  *   },
- *     itemOperations={"get", "delete","put"},
- *     denormalizationContext={"disable_type_enforcement"=true}
+ *     itemOperations={"GET"={"path"="/page_carnet_santes/{id}/update"},
+ *     "DELETE"},
+ *     denormalizationContext={"disable_type_enforcement"=true},
  * )
  * @ORM\Entity(repositoryClass=PageCarnetSanteRepository::class)
  */
@@ -54,46 +55,63 @@ class PageCarnetSante
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","page_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"assures_read"})
-     * * @ApiProperty(
-     *   iri="http://schema.org/image",
-     *   attributes={
-     *     "openapi_context"={
-     *       "type"="string",
-     *     }
-     *   }
-     * )
+     * @Groups({"assures_read","page_read"})
      */
     private $lienFichier;
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="lienFichier")
+     * @Groups({"write"})
+     */
+    private $file ;
 
 
     /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     *
+     * @param File|null $file
+     * @return PageCarnetSante
+     */
+    public function setFile(?File $file): PageCarnetSante
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
      * @ORM\Column(type="datetime")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","page_read"})
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime",nullable=true)
+     * @Groups({"assures_read","page_read"})
      * @Groups({"assures_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","page_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","page_read"})
      */
     private $active;
 

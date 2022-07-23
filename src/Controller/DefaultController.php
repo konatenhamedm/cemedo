@@ -11,6 +11,7 @@ use App\Entity\Infirmier;
 use App\Entity\Medecin;
 use App\Entity\Media;
 use App\Entity\Medicament;
+use App\Entity\PageCarnetSante;
 use App\Entity\Patient;
 use App\Entity\Pharmacien;
 use App\Entity\User;
@@ -48,7 +49,7 @@ class DefaultController
     private $repo;
     private $repository;
 
-    public function __construct(AssuranceRepository $repo,TypeMedecinRepository $repository, EntityManagerInterface $manager, UserPasswordHasherInterface $encoder, Security $security)
+    public function __construct(AssuranceRepository $repo,PageCarnetSanteRepository $pageCarnetSanteRepository,TypeMedecinRepository $repository, EntityManagerInterface $manager, UserPasswordHasherInterface $encoder, Security $security)
     {
         $this->manager = $manager;
         $this->encoder = $encoder;
@@ -70,6 +71,15 @@ class DefaultController
                 $entity->setFile($request->files->get('file'));
             if ($request->request->get("titre"))
                 $entity->setTitre($request->request->get("titre"));
+        }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\PageCarnetSante"){
+            $entity = $pageCarnetSanteRepository->find($request->attributes->get('id'));
+
+            //$file = $request->files->get('file');
+
+            if($request->files->get('file'))
+                $entity->setFile($request->files->get('file'));
+           /* if ($request->request->get("titre"))
+                $entity->setTitre($request->request->get("titre"));*/
         }
         elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
             $entity = $patientRepository->find($request->attributes->get('id'));
@@ -99,8 +109,8 @@ class DefaultController
                 $entity->setPassword($hash);
             if ($request->request->get("nom"))
                 $entity->setNom($request->request->get("nom"));
-            if ($request->request->get("assurance"))
-                $entity->setAssurance($this->repo->find($request->request->get("assurance")));
+          /*  if ($request->request->get("assurance"))
+                $entity->setAssurance($this->repo->find($request->request->get("assurance")));*/
             if ($request->request->get("prenoms"))
                 $entity->setPrenoms($request->request->get("prenoms"));
             if ($request->request->get("email"))
@@ -119,6 +129,8 @@ class DefaultController
                 $entity->setNumeroAssure($request->request->get("numeroAssure"));
             if ($request->request->get("lieuHabitation"))
                 $entity->setLieuHabitation($request->request->get("lieuHabitation"));
+            if ($request->request->get("profession"))
+                $entity->setProfession($request->request->get("profession"));
         }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\PageCarnetSante"){
             $entity = $pageCarnetSanteRepository->find($request->attributes->get('id'));
             $lieFichier = $request->files->get('lieFichier');
@@ -169,8 +181,8 @@ class DefaultController
                     $entity->setSalaireMedecin(floatval($request->request->get("salaireMedecin")));
                 if ($request->request->get("specialiteMedecin"))
                     $entity->setSepecialiteMedecin($request->request->get("specialiteMedecin"));
-                if ($request->request->get("typeMedecin"))
-                    $entity->setTypeMedecin($this->repository->find($request->request->get("typeMedecin")));
+               /* if ($request->request->get("typeMedecin"))
+                    $entity->setTypeMedecin($this->repository->find($request->request->get("typeMedecin")));*/
                 if ($request->request->get("heureDebut"))
                     $entity->setHeureDebut(\DateTime::createFromFormat('Y-m-d', $request->request->get("heureDebut")));
                 if ($request->request->get("heureFin"))
@@ -179,8 +191,6 @@ class DefaultController
             }
 
         }
-
-
 
         return $entity;
 
@@ -230,9 +240,52 @@ class DefaultController
         $entity->setAutreAntecedent($request->request->get("autreAntecedent"));
         $entity->setNumeroAssure($request->request->get("numeroAssure"));
         $entity->setLieuHabitation($request->request->get("lieuHabitation"));
-       /* $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setProfession($request->request->get("profession"));
+        $entity->setRoles(array("ROLE_PATIENT"));
+       if ($request->request->get("assurance"))
+               $entity->setAssurance($this->repo->find($request->request->get("assurance")));
+
+        $entity->setCreatedAt(new \DateTime('now'));
         $entity->setActive(true);
-        $entity->setVersion(0);*/
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => "dedicace a mon pote yves"
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
+    }
+
+
+
+    /**
+     * @Route("/cemedo/page_carnet_santes", name="page_carnet_santes", methods={"post"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    public function newPageCarnet(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    {
+        $response = new Response();
+        $file = $request->files->get('file');
+
+        $entity = new PageCarnetSante();
+
+        if ($file)
+            $entity->setFile($file);
+
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setUpdatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
         $entityManager->persist($entity);
         $entityManager->flush();
 
