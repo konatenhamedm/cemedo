@@ -190,16 +190,24 @@ class Patient extends Assure
      */
     private $assuranceVerso;
 
+
+
     /**
-     * @ORM\ManyToOne(targetEntity=RendezVous::class, inversedBy="emetteur")
+     * @ORM\OneToMany(targetEntity=RendezVous::class, mappedBy="emetteur")
      */
     private $rendezVous;
 
     /**
-     * @Groups({"assures_read"})
      * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
      */
     private $membresFamille;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->rendezVous = new ArrayCollection();
+        $this->membresFamille = new ArrayCollection();
+    }
 
 
     public function getPieceIdRecto(): ?string
@@ -250,14 +258,33 @@ class Patient extends Assure
         return $this;
     }
 
-    public function getRendezVous(): ?RendezVous
+
+    /**
+     * @return Collection<int, RendezVous>
+     */
+    public function getRendezVous(): Collection
     {
         return $this->rendezVous;
     }
 
-    public function setRendezVous(?RendezVous $rendezVous): self
+    public function addRendezVou(RendezVous $rendezVou): self
     {
-        $this->rendezVous = $rendezVous;
+        if (!$this->rendezVous->contains($rendezVou)) {
+            $this->rendezVous[] = $rendezVou;
+            $rendezVou->setEmetteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRendezVou(RendezVous $rendezVou): self
+    {
+        if ($this->rendezVous->removeElement($rendezVou)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVou->getEmetteur() === $this) {
+                $rendezVou->setEmetteur(null);
+            }
+        }
 
         return $this;
     }
@@ -270,22 +297,22 @@ class Patient extends Assure
         return $this->membresFamille;
     }
 
-    public function addMembreFamille(MembreFamille $membreFamille): self
+    public function addMembresFamille(MembreFamille $membresFamille): self
     {
-        if (!$this->membresFamille->contains($membreFamille)) {
-            $this->membresFamille[] = $membreFamille;
-            $membreFamille->setPatient($this);
+        if (!$this->membresFamille->contains($membresFamille)) {
+            $this->membresFamille[] = $membresFamille;
+            $membresFamille->setPatient($this);
         }
 
         return $this;
     }
 
-    public function removeMembreFamille(MembreFamille $membreFamille): self
+    public function removeMembresFamille(MembreFamille $membresFamille): self
     {
-        if ($this->membresFamille->removeElement($membreFamille)) {
+        if ($this->membresFamille->removeElement($membresFamille)) {
             // set the owning side to null (unless already changed)
-            if ($membreFamille->getPatient() === $this) {
-                $membreFamille->setPatient(null);
+            if ($membresFamille->getPatient() === $this) {
+                $membresFamille->setPatient(null);
             }
         }
 

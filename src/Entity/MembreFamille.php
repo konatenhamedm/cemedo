@@ -29,17 +29,17 @@ class MembreFamille extends Assure
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="membreFamilles")
-     * @Groups({"familles_read"})
-     */
-    private $patient;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
      * @Groups({"familles_read"})
      */
     private $relation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="membresFamille")
+     */
+    private $patient;
 
     public function getRelation(): ?string
     {
@@ -64,4 +64,5 @@ class MembreFamille extends Assure
 
         return $this;
     }
+
 }

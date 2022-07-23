@@ -77,14 +77,12 @@ class RendezVous
     private $active;
 
     /**
-     * @Groups({"medecins_read"})
-     * @ORM\OneToMany(targetEntity=Patient::class, mappedBy="rendezVous")
+     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="rendezVous")
      */
     private $emetteur;
 
     public function __construct()
     {
-        $this->emetteur = new ArrayCollection();
     }
 
 
@@ -202,32 +200,14 @@ class RendezVous
         return $this;
     }
 
-    /**
-     * @return Collection<int, Patient>
-     */
-    public function getEmetteur(): Collection
+    public function getEmetteur(): ?Patient
     {
         return $this->emetteur;
     }
 
-    public function addEmetteur(Patient $emetteur): self
+    public function setEmetteur(?Patient $emetteur): self
     {
-        if (!$this->emetteur->contains($emetteur)) {
-            $this->emetteur[] = $emetteur;
-            $emetteur->setRendezVous($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEmetteur(Patient $emetteur): self
-    {
-        if ($this->emetteur->removeElement($emetteur)) {
-            // set the owning side to null (unless already changed)
-            if ($emetteur->getRendezVous() === $this) {
-                $emetteur->setRendezVous(null);
-            }
-        }
+        $this->emetteur = $emetteur;
 
         return $this;
     }
