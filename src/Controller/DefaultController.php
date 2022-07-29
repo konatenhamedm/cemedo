@@ -280,7 +280,7 @@ class DefaultController
             ]
 
         ];
-e
+
         $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
 
         if ($pieceIdRecto)
