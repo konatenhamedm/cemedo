@@ -58,11 +58,9 @@ class Patient extends Assure
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read","familles_read","patient_read"})
+     * @Groups({"patient_read"})
      */
     private $id;
-
-
 
     /**
      * @var File|null
@@ -168,25 +166,25 @@ class Patient extends Assure
      *
      * @Groups({"assures_read","familles_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"assures_read","familles_read","patient_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $pieceIdRecto;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"assures_read","familles_read","patient_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $pieceIdVerso;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"assures_read","familles_read","patient_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $assuranceRecto;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"assures_read","familles_read","patient_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $assuranceVerso;
 
@@ -199,6 +197,7 @@ class Patient extends Assure
 
     /**
      * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
+     *@Groups({"assures_read","patient_read"})
      */
     private $membresFamille;
 

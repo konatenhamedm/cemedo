@@ -72,7 +72,7 @@ security:
         - { path: ^/cemedo/services, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/type_fichier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/type_services, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/cemedo/membre_familles, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/dossier_medicals, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/infirmiers, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cemedo/gerants, roles: IS_AUTHENTICATED_ANONYMOUSLY }

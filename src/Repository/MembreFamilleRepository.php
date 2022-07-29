@@ -39,6 +39,17 @@ class MembreFamilleRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findByExampleField($value): array
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.assure = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return MembreFamille[] Returns an array of MembreFamille objects
 //     */

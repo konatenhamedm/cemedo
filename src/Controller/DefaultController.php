@@ -108,14 +108,15 @@ class DefaultController
                 $entity->setFileAssuranceRecto($assuranceRecto);
             if ($assuranceVerso)
                 $entity->setFileAssuranceVerso($assuranceVerso);
-
+//dd($entity->getPassword());
             if ($request->request->get("tel"))
                 $entity->setTel($request->request->get("tel"));
             if ($request->request->get("tel2"))
                 $entity->setTel2($request->request->get("tel2"));
-            if ($request->request->get("password")){
-                    $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
-                $entity->setPassword($hash);
+            if (is_null($request->request->get("password"))){
+                $entity->setPassword($entity->getPassword());
+            }else{
+                $entity->setPassword($this->encoder->hashPassword(new Assure(), $request->request->get("password")));
             }
 
             if ($request->request->get("nom"))
@@ -300,6 +301,7 @@ class DefaultController
         $entity->setAssurance($this->repo->find($request->request->get("assurance")));
         $entity->setPrenoms($request->request->get("prenoms"));
         $entity->setEmail($request->request->get("email"));
+        $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
         $entity->setSexe($request->request->get("sexe"));
         $entity->setFcmtoken($request->request->get("fcmtoken"));
         $entity->setTauxCouverture(floatval($request->request->get("tauxCouverture")));
@@ -940,8 +942,8 @@ class DefaultController
              'pageCarnets' => $arrayPageCarnet,
              'fichierFichierMedicaments' => $arrayFichierMedical,
              'medecins' => $arrayMedecin,
-             'factures' => $arrayFacture,
-             'familles' => $arrayFamille*/
+             'factures' => $arrayFacture,*/
+             'familles' => $arrayFamille
         ]));
 
         $response->headers->set('Content-Type', 'application/json');
@@ -955,10 +957,40 @@ class DefaultController
         dd($media);
     }
 
-    /*
-    * @Route("cemedo/affections/update",name="update_affection", methods={"get","post","put"})
-    */
-    public function UpdateAffection(Request $request,AffectionRepository $repository){
-        dd("ffffrf");
+
+
+    /**
+     * @Route("/cemedo/membre_famille", name="all_objects", methods={"post","get"})
+     * @param MembreFamilleRepository $membreFamilleRepository
+     * @return Response
+     */
+    public function getALlFamille(
+        MembreFamilleRepository $membreFamilleRepository,Security $security
+    )
+    {
+        $this->getUser();
+dd($security->getUser());
+        $response = new Response();
+
+        $arrayFamille = array();
+        foreach ($membreFamilleRepository->findByExampleField($this->security->getUser()) as $patient){
+            $arrayFamille [] = array(
+                'id'=>$patient->getId(),
+                'nom'=>$patient->getNom(),
+                'prenom'=>$patient->getPrenoms(),
+                'tel'=>$patient->getTel(),
+                'tel2'=>$patient->getTel2(),
+            );
+        }
+
+
+        $response->setContent(json_encode([
+            'status' => 200,
+            'familles' => $arrayFamille
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 }

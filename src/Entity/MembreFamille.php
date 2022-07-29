@@ -10,14 +10,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- *      normalizationContext={
- *      "groups"= {"familles_read"}
- *          }
- * )
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=MembreFamilleRepository::class)
  */
-#[ApiFilter(SearchFilter::class, properties: ['patient' => 2])]
 class MembreFamille extends Assure
 {
 
@@ -25,21 +20,19 @@ class MembreFamille extends Assure
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *@Groups({"familles_read"})
+     * @Groups({"assures_read"})
      */
     private $id;
 
-
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"familles_read"})
      */
     private $relation;
 
     /**
      * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="membresFamille")
      */
-    private $patient;
+    private $assure;
 
     public function getRelation(): ?string
     {
@@ -55,12 +48,12 @@ class MembreFamille extends Assure
 
     public function getPatient(): ?Patient
     {
-        return $this->patient;
+        return $this->assure;
     }
 
-    public function setPatient(?Patient $patient): self
+    public function setPatient(?Patient $assure): self
     {
-        $this->patient = $patient;
+        $this->assure = $assure;
 
         return $this;
     }
