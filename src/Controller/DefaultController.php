@@ -120,8 +120,10 @@ class DefaultController
                 $entity->setPassword($hash);
             if ($request->request->get("nom"))
                 $entity->setNom($request->request->get("nom"));
-          /*  if ($request->request->get("assurance"))
+            /*if ($request->request->get("assurance"))
                 $entity->setAssurance($this->repo->find($request->request->get("assurance")));*/
+            if ($request->request->get("autreAntecedent"))
+                $entity->setAutreAntecedent($request->request->get("autreAntecedent"));
             if ($request->request->get("prenoms"))
                 $entity->setPrenoms($request->request->get("prenoms"));
             if ($request->request->get("email"))
@@ -278,7 +280,7 @@ class DefaultController
             ]
 
         ];
-
+e
         $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
 
         if ($pieceIdRecto)
