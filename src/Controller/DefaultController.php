@@ -320,7 +320,7 @@ class DefaultController
             $affection->setAssure($entity)
                 ->setLibelle($aft['libelle'])
                 ->setCle($aft['key'])
-                ->setValue(false)
+                ->setValue(0)
                 ->setUpdatedAt(new \DateTime('now'))
                 ->setCreatedAt(new \DateTime('now'))
                 ->setActive(true)
@@ -951,5 +951,12 @@ class DefaultController
      */
     public function getMedia($id,Media $media){
         dd($media);
+    }
+
+    /*
+    * @Route("cemedo/affections/update",name="update_affection", methods={"get","post","put"})
+    */
+    public function UpdateAffection(Request $request,AffectionRepository $repository){
+        dd("ffffrf");
     }
 }

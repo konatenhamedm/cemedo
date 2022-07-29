@@ -9,15 +9,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     itemOperations={"GET","PUT","DELETE","increment"={
+ *     collectionOperations={
+ *     "get",
+ *    "increment"={
  *     "method"="post",
- *     "path"="/affections/{id}/update"
+ *     "path"="/affecions/update"
  *      ,"controller"="App\Controller\DefaultController",
  *      "swagger_context"={
  *         "summary"="Incremente une facture",
  *        "description"="Permet de creer une facture"
  *     }
- *     }},
+ *     }
+ *     }
  * )
  * @ORM\Entity(repositoryClass=AffectionRepository::class)
  */
@@ -74,9 +77,10 @@ class Affection
     private $libelle;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
     private $value;
+
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -168,15 +172,16 @@ class Affection
         return $this;
     }
 
-    public function isValue(): ?bool
+    public function getValue(): ?int
     {
         return $this->value;
     }
 
-    public function setValue(bool $value): self
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
         return $this;
     }
+
 }
