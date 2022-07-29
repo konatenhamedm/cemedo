@@ -828,7 +828,7 @@ class DefaultController
         $arrayAffection [] = array(
             'id'=>$patient->getId(),
             'libelle'=>$patient->getLibelle(),
-            'value'=>$patient->isValue(),
+            'value'=>$patient->getValue(),
             'active'=>$patient->isActive(),
         );
     }

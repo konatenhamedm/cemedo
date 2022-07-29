@@ -9,18 +9,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     collectionOperations={
- *     "get",
- *    "increment"={
- *     "method"="post",
- *     "path"="/affecions/update"
- *      ,"controller"="App\Controller\DefaultController",
- *      "swagger_context"={
- *         "summary"="Incremente une facture",
- *        "description"="Permet de creer une facture"
- *     }
- *     }
- *     }
  * )
  * @ORM\Entity(repositoryClass=AffectionRepository::class)
  */
