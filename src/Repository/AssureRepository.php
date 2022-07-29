@@ -55,7 +55,14 @@ class AssureRepository extends ServiceEntityRepository implements PasswordUpgrad
 
         $this->add($user, true);
     }
-
+    public function getPatient($patient){
+        return $this->createQueryBuilder("d")
+            ->select("d.id","d.nom","d.prenoms","d.email","d.email","d.tel","d.roles")
+            ->andWhere('d.id=:patient')
+            ->setParameter('patient',$patient)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Assure[] Returns an array of Assure objects
 //     */

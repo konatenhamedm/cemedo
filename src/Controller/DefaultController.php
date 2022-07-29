@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Administrateur;
+use App\Entity\Affection;
 use App\Entity\Assure;
 use App\Entity\Comptable;
 use App\Entity\Gerant;
@@ -18,6 +19,7 @@ use App\Entity\User;
 use App\Repository\AdresseRepository;
 use App\Repository\AffectionRepository;
 use App\Repository\AssuranceRepository;
+use App\Repository\AssureRepository;
 use App\Repository\FactureRepository;
 use App\Repository\FichierMedicalRepository;
 use App\Repository\GerantRepository;
@@ -59,9 +61,18 @@ class DefaultController
 
     }
 
-    public function __invoke(MediaRepository $mediaRepository,UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
+    public function __invoke(AffectionRepository $affectionRepository,MediaRepository $mediaRepository,UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
     {
        // dd();
+        if ($request->attributes->get('_api_resource_class') === "App\Entity\Affection"){
+            $entity = $affectionRepository->find($request->attributes->get('id'));
+
+            $etat = $entity->isValue();
+
+            dd($etat);
+
+        }
+
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Media"){
             $entity = $mediaRepository->find($request->attributes->get('id'));
 
@@ -203,7 +214,7 @@ class DefaultController
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function newPatient(Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager)
+    public function newPatient(Request $request,AssureRepository $repository, FileUploader $fileUploader, EntityManagerInterface $entityManager,PatientRepository $patientRepository)
     {
         $response = new Response();
         $pieceIdRecto = $request->files->get('pieceIdRecto');
@@ -216,6 +227,58 @@ class DefaultController
 
         $entity = new Patient();
 
+        $affections = [
+            [
+                "key"=>"asthme",
+                "libelle"=>"Faites-vous de l'asthme ?",
+            ],
+            [
+                "key"=>"drepanocytose",
+                "libelle"=>"Etes-vous drépanocytaire ?",
+            ],
+            [
+                "key"=>"diabete",
+                "libelle"=>"Avez-vous la diabète ?",
+            ],
+            [
+                "key"=>"ulcere",
+                "libelle"=>"Etes-vous ulcérieux(se) ?",
+            ],
+            [
+                "key"=>"vih",
+                "libelle"=>"Avez-vous le VIH/SIDA ?",
+            ],
+            [
+                "key"=>"hepatite",
+                "libelle"=>"Avez-vous de l'hépatie ?",
+            ],
+            [
+                "key"=>"insCardiaque",
+                "libelle"=>"Avez-vous une insuffisance cardiaque ?",
+            ],
+            [
+                "key"=>"insRenal",
+                "libelle"=>"Avez-vous une insuffisance rénale ?",
+            ],
+            [
+                "key"=>"tension",
+                "libelle"=>"Etes-vous sujet à des tensions artérielles haute ou base ?",
+            ],
+            [
+                "key"=>"allergies",
+                "libelle"=>"Etes-vous sujet à des allergies médicamenteuses et/ou alimentaire ?",
+            ],
+            [
+                "key"=>"articulation",
+                "libelle"=>"Avez-vous une maladie liée aux articulations ?",
+            ],
+            [
+                "key"=>"cardiaque",
+                "libelle"=>"Avez-vous une maladie cardiaque ?",
+            ]
+
+        ];
+
         $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
 
         if ($pieceIdRecto)
@@ -227,7 +290,8 @@ class DefaultController
         if ($assuranceVerso)
             $entity->setFileAssuranceVerso($assuranceVerso);
 
-        $entity->setTel($request->request->get("tel"));
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
         $entity->setTel2($request->request->get("tel2"));
         $entity->setPassword($hash);
         $entity->setNom($request->request->get("nom"));
@@ -251,10 +315,24 @@ class DefaultController
         $entityManager->persist($entity);
         $entityManager->flush();
 
+        foreach ($affections as $aft){
+            $affection = new Affection();
+            $affection->setAssure($entity)
+                ->setLibelle($aft['libelle'])
+                ->setCle($aft['key'])
+                ->setValue(false)
+                ->setUpdatedAt(new \DateTime('now'))
+                ->setCreatedAt(new \DateTime('now'))
+                ->setActive(true)
+                ->setVersion(0);
+
+            $entityManager->persist($affection);
+            $entityManager->flush();
+        }
 
         $response->setContent(json_encode([
             'status' => 200,
-            'data' => "dedicace a mon pote yves"
+            'data' => $repository->getPatient($patientRepository->getLastPatient())
         ]));
 
         $response->headers->set('Content-Type', 'application/json');
@@ -262,8 +340,6 @@ class DefaultController
         return $response;
 
     }
-
-
 
     /**
      * @Route("/cemedo/page_carnet_santes", name="page_carnet_santes", methods={"post"})

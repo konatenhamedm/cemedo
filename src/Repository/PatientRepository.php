@@ -48,6 +48,22 @@ class PatientRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getPatient($patient){
+        return $this->createQueryBuilder("d")
+            ->select("d.id","d.nom","d.prenoms","d.email","d.email","d.tel","d.roles")
+            ->andWhere('d.id=:patient')
+            ->setParameter('patient',$patient)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getLastPatient(){
+        return $this->createQueryBuilder("d")
+            ->select("max(d.id) as id")
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return Patient[] Returns an array of Patient objects
 //     */

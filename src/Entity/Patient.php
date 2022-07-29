@@ -17,7 +17,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @Vich\Uploadable()
  *@ApiResource(
  *     normalizationContext={"groups"= {"patient_read"}},
- *      denormalizationContext={"groups"= {"write"}},
+ *      denormalizationContext={"groups"= {"write"},"disable_type_enforcement"=true},
  *   collectionOperations={
  *     "get",
  *  "image_pharmacien" = {

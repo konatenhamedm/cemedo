@@ -8,7 +8,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={"GET","PUT","DELETE","increment"={
+ *     "method"="post",
+ *     "path"="/affections/{id}/update"
+ *      ,"controller"="App\Controller\DefaultController",
+ *      "swagger_context"={
+ *         "summary"="Incremente une facture",
+ *        "description"="Permet de creer une facture"
+ *     }
+ *     }},
+ * )
  * @ORM\Entity(repositoryClass=AffectionRepository::class)
  */
 class Affection
@@ -17,38 +27,38 @@ class Affection
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $id;
 
 
     /**
      * @ORM\Column(type="datetime")
-     *  @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
-     *  @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
-     *  @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
-     *  @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read"})
      */
     private $active;
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read"})
      */
     private $cle;
 
@@ -59,7 +69,7 @@ class Affection
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read"})
      */
     private $libelle;
 

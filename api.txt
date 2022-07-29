@@ -92,16 +92,16 @@ INFIRMIER
 
  var data={
   "nom":"Konate",
-	 "prenoms":"Seydou",
+  "prenoms":"Seydou",
    "email":"seydoudd@gmail.com",
-	 "password":"achi",
-	 "genre":"M",
-	 "tel":"014088052",
+   "password":"achi",
+   "genre":"M",
+   "tel":"014088052",
 	 "dateNaissance":"2021-05-05",
 	"file":imagefile.files[0],
 	"numeroCni":"DALOA",
-"salaireInfirmier":07000,
-	"file":imagefile2.files[0]
+"salaireInfirmier":07000
+	
  };
 
 MEDECIN
