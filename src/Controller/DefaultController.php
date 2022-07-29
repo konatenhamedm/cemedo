@@ -100,9 +100,6 @@ class DefaultController
             $assuranceRecto = $request->files->get('assuranceRecto');
             $assuranceVerso = $request->files->get('assuranceVerso');
 
-            if ($request->request->get("password"))
-                $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
-
             if ($pieceIdRecto)
                 $entity->setFile($pieceIdRecto);
             if ($pieceIdVerso)
@@ -116,8 +113,11 @@ class DefaultController
                 $entity->setTel($request->request->get("tel"));
             if ($request->request->get("tel2"))
                 $entity->setTel2($request->request->get("tel2"));
-            if ($request->request->get("password"))
+            if ($request->request->get("password")){
+                    $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
                 $entity->setPassword($hash);
+            }
+
             if ($request->request->get("nom"))
                 $entity->setNom($request->request->get("nom"));
             /*if ($request->request->get("assurance"))
