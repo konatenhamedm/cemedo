@@ -78,6 +78,7 @@ class Affection
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"assures_read","patient_read"})
      */
     private $value;
 
