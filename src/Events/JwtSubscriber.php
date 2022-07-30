@@ -40,7 +40,7 @@ private $userRepository;
       //dd($event->getData());*/
 
          $request = $this->requestStack->getCurrentRequest();
-         $expiration = new \DateTime('+30 day');
+         $expiration = new \DateTime('+60 day');
          $expiration->setTime(2, 0, 0);
 
          $payload       = $event->getData();

@@ -48,6 +48,9 @@ class AuthenticationSuccessListener
     private $pageCarnetSanteRepository;
     private $livraison;
     private $rendezVous;
+    private $pageCarnet;
+    private $fichierMedical;
+    private $typeFichier;
 
     public function __construct(
         AdresseRepository $adresseRepository,
@@ -68,7 +71,10 @@ class AuthenticationSuccessListener
     LivraisonRepository $livraison,
         RendezVousRepository $rendezVous,
     UserRepository $user,
-    AssureRepository $assure
+    AssureRepository $assure,
+    FichierMedicalRepository $fichierMedical,
+    TypeFichierMedicalRepository $typeFichier,
+    PageCarnetSanteRepository $pageCarnet
     )
     {
                 $this->rendezVous=$rendezVous;
@@ -89,6 +95,9 @@ class AuthenticationSuccessListener
                 $this->typeMedecinRepository=$typeMedecinRepository;
                 $this->typeServiceRepository=$typeServiceRepository;
                 $this->pageCarnetSanteRepository=$pageCarnetSanteRepository;
+                $this->pageCarnet=$pageCarnet;
+                $this->typeFichier=$typeFichier;
+                $this->fichierMedical=$fichierMedical;
     }
 
     /**
@@ -169,6 +178,7 @@ class AuthenticationSuccessListener
                 'active'=>$patient->isActive(),
             );
         }
+
         $arrayAllService = array();
 
         foreach ($this->serviceRepository->getServices() as $patient){
@@ -184,34 +194,8 @@ class AuthenticationSuccessListener
             );
         }
 
-        $arrayMedicament = array();
-        foreach ($this->medicamentRepository->findAll() as $patient){
-            $arrayMedicament [] = array(
-                'id'=>$patient->getId(),
-                'libelle'=>$patient->getLibelle(),
-                'active'=>$patient->isActive(),
-            );
-        }
-         $arrayOrdonnance = array();
-        foreach ($this->ordonnanceRepository->findBy(['assure'=>$user]) as $patient){
-            $arrayOrdonnance [] = array(
-                'id'=>$patient->getId(),
-                'libelle'=>$patient->getLibelle(),
-                'active'=>$patient->isActive(),
-            );
-        }
-
-        $arrayLivraison= array();
-        foreach ($this->livraison->findBy(['assure'=>$user]) as $patient){
-            $arrayLivraison [] = array(
-                'id'=>$patient->getId(),
-                'date_livraison'=>$patient->getDateLivraison(),
-                'etat'=>$patient->getEtat(),
-                'active'=>$patient->isActive(),
-            );
-        }
 //dd($this->rendezVous->findBy(['concerne'=>$user]));
-        $arrayRendezVous= array();
+      /* $arrayRendezVous= array();
         foreach ($this->rendezVous->findBy(['concerne'=>$user]) as $patient){
             //dd($patient->getGerant()->getNom());
             $arrayRendezVous [] = array(
@@ -241,26 +225,9 @@ class AuthenticationSuccessListener
                 ],
                 'active'=>$patient->isActive(),
             );
-        }
-        // dd($arrayService);
-       /* $arrayTypeService = array();
-        foreach ($typeServiceRepository->findAll() as $patient){
-            $arrayTypeService [] = array(
-                'id'=>$patient->getId(),
-                'libelle'=>$patient->getLibelle(),
-                'active'=>$patient->isActive(),
-            );
-        }
-        $arrayTypeMedecin = array();
-        foreach ($typeMedecinRepository->findAll() as $patient){
-            $arrayTypeMedecin [] = array(
-                'id'=>$patient->getId(),
-                'libelle'=>$patient->getLibelle(),
-                'active'=>$patient->isActive(),
-            );
-        }
+        }*/
         $arrayTypeFichier = array();
-        foreach ($typeFichierMedicalRepository->findAll() as $patient){
+        foreach ($this->typeFichier->findAll() as $patient){
             $arrayTypeFichier [] = array(
                 'id'=>$patient->getId(),
                 'libelle'=>$patient->getLibelle(),
@@ -270,15 +237,15 @@ class AuthenticationSuccessListener
 
 
         $arrayPageCarnet = array();
-        foreach ($pageCarnetSanteRepository->findAll() as $patient){
+        foreach ($this->pageCarnet->findBy(['assure'=>$user]) as $patient){
             $arrayPageCarnet [] = array(
                 'id'=>$patient->getId(),
-                'lien'=>$patient->getLienFichier(),
+                'lien'=>"http://cemedos.openslearning.com/uploads/images/".$patient->getLienFichier(),
                 'active'=>$patient->isActive(),
             );
         }
         $arrayFichierMedical = array();
-        foreach ($fichierMedicalRepository->findAll() as $patient){
+        foreach ($this->fichierMedical->findBy(['assure'=>$user]) as $patient){
             $arrayFichierMedical [] = array(
                 'id'=>$patient->getId(),
                 'libelle'=>$patient->getLibelle(),
@@ -286,17 +253,7 @@ class AuthenticationSuccessListener
             );
         }
 
-        $arrayMedecin = array();
-        foreach ($medecinRepository->findAll() as $patient){
-            $arrayMedecin [] = array(
-                'id'=>$patient->getId(),
-                'nom'=>$patient->getNom(),
-                'prenoms'=>$patient->getPrenoms(),
-                'specialite'=>$patient->getSepecialiteMedecin(),
-                'active'=>$patient->isActive(),
-            );
-        }*/
-if($user instanceof Assure || $user instanceof  Patient || $user instanceof MembreFamille){
+        if($user instanceof Assure || $user instanceof  Patient || $user instanceof MembreFamille){
     $data['data'] = array(
         'id'=>$user->getId(),
         'nom'=>$user->getNom(),
@@ -304,6 +261,10 @@ if($user instanceof Assure || $user instanceof  Patient || $user instanceof Memb
         'tel'=>$user->getTel(),
         'email'=>$user->getEmail(),
         'tel2'=>$user->getTel2(),
+        'assurance'=>[
+            'id'=>$this->assuranceRepository->findOneBy(['id'=>$user->getAssurance()->getId()])->getId(),
+            'libelle'=>$this->assuranceRepository->findOneBy(['id'=>$user->getAssurance()->getId()])->getLibelle()
+        ],
         'password'=>$user->getPassword(),
         'sexe'=>$user->getSexe(),
         'fcmtoken'=>$user->getFcmtoken(),
@@ -317,19 +278,21 @@ if($user instanceof Assure || $user instanceof  Patient || $user instanceof Memb
         'version'=>$user->getVersion(),
         'active'=>$user->isActive(),
         'profession'=>$user->getProfession(),
-        'pieceIdRecto'=>$user->getPieceIdRecto(),
-        'pieceIdVerso'=>$user->getPieceIdVerso(),
-        'assuranceRecto'=>$user->getAssuranceRecto(),
-        'assuranceVerso'=>$user->getAssuranceVerso(),
+        'pieceIdRecto'=>"http://cemedos.openslearning.com/uploads/images/".$user->getPieceIdRecto(),
+        'pieceIdVerso'=>"http://cemedos.openslearning.com/uploads/images/".$user->getPieceIdVerso(),
+        'assuranceRecto'=>"http://cemedos.openslearning.com/uploads/images/".$user->getAssuranceRecto(),
+        'assuranceVerso'=>"http://cemedos.openslearning.com/uploads/images/".$user->getAssuranceVerso(),
         'roles' => $user->getRoles(),
         'familles'=> $arrayFamille,
+        'all_assurance'=> $arrayAllAssurance,
+        'page_carnet'=> $arrayPageCarnet,
+        'fichier_medical'=> $arrayFichierMedical,
         'affections'=> $arrayAffection,
         'all_affections'=> $arrayAllAffection,
-        'all_services'=> $arrayAllService,
-        'factures'=> $arrayFacture,
-        'ordonnances'=> $arrayOrdonnance,
+       /* 'ordonnances'=> $arrayOrdonnance,*/
         'adresses'=> $arrayAdresse,
-        'rendez_vous'=> $arrayRendezVous,
+        'typeFichier'=> $arrayTypeFichier,
+        /*'rendez_vous'=> $arrayRendezVous,*/
     );
 
     $event->setData($data);
