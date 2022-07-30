@@ -2,6 +2,9 @@
 
 
 namespace App\Events;
+use App\Entity\Assure;
+use App\Entity\MembreFamille;
+use App\Entity\Patient;
 use App\Repository\AdresseRepository;
 use App\Repository\AffectionRepository;
 use App\Repository\AssuranceRepository;
@@ -293,42 +296,44 @@ class AuthenticationSuccessListener
                 'active'=>$patient->isActive(),
             );
         }*/
+if($user instanceof Assure || $user instanceof  Patient || $user instanceof MembreFamille){
+    $data['data'] = array(
+        'id'=>$user->getId(),
+        'nom'=>$user->getNom(),
+        'prenoms'=>$user->getPrenoms(),
+        'tel'=>$user->getTel(),
+        'email'=>$user->getEmail(),
+        'tel2'=>$user->getTel2(),
+        'password'=>$user->getPassword(),
+        'sexe'=>$user->getSexe(),
+        'fcmtoken'=>$user->getFcmtoken(),
+        'tauxCouverture'=>$user->getTauxCouverture(),
+        'autreAntecedent'=>$user->getAutreAntecedent(),
+        'numeroAssure'=>$user->getNumeroAssure(),
+        'lieuHabitation'=>$user->getLieuHabitation(),
+        'dateNaissance'=>$user->getDateNaissance(),
+        'createdAt'=>$user->getCreatedAt(),
+        'updatedAt'=>$user->getUpdatedAt(),
+        'version'=>$user->getVersion(),
+        'active'=>$user->isActive(),
+        'profession'=>$user->getProfession(),
+        'pieceIdRecto'=>$user->getPieceIdRecto(),
+        'pieceIdVerso'=>$user->getPieceIdVerso(),
+        'assuranceRecto'=>$user->getAssuranceRecto(),
+        'assuranceVerso'=>$user->getAssuranceVerso(),
+        'roles' => $user->getRoles(),
+        'familles'=> $arrayFamille,
+        'affections'=> $arrayAffection,
+        'all_affections'=> $arrayAllAffection,
+        'all_services'=> $arrayAllService,
+        'factures'=> $arrayFacture,
+        'ordonnances'=> $arrayOrdonnance,
+        'adresses'=> $arrayAdresse,
+        'rendez_vous'=> $arrayRendezVous,
+    );
 
-        $data['data'] = array(
-            'id'=>$user->getId(),
-            'nom'=>$user->getNom(),
-            'prenoms'=>$user->getPrenoms(),
-            'tel'=>$user->getTel(),
-            'email'=>$user->getEmail(),
-            'tel2'=>$user->getTel2(),
-            'password'=>$user->getPassword(),
-            'sexe'=>$user->getSexe(),
-            'fcmtoken'=>$user->getFcmtoken(),
-            'tauxCouverture'=>$user->getTauxCouverture(),
-            'autreAntecedent'=>$user->getAutreAntecedent(),
-            'numeroAssure'=>$user->getNumeroAssure(),
-            'lieuHabitation'=>$user->getLieuHabitation(),
-            'dateNaissance'=>$user->getDateNaissance(),
-            'createdAt'=>$user->getCreatedAt(),
-            'updatedAt'=>$user->getUpdatedAt(),
-            'version'=>$user->getVersion(),
-            'active'=>$user->isActive(),
-            'profession'=>$user->getProfession(),
-            'pieceIdRecto'=>$user->getPieceIdRecto(),
-            'pieceIdVerso'=>$user->getPieceIdVerso(),
-            'assuranceRecto'=>$user->getAssuranceRecto(),
-            'assuranceVerso'=>$user->getAssuranceVerso(),
-            'roles' => $user->getRoles(),
-            'familles'=> $arrayFamille,
-            'affections'=> $arrayAffection,
-            'all_affections'=> $arrayAllAffection,
-            'all_services'=> $arrayAllService,
-            'factures'=> $arrayFacture,
-            'ordonnances'=> $arrayOrdonnance,
-            'adresses'=> $arrayAdresse,
-            'rendez_vous'=> $arrayRendezVous,
-        );
+    $event->setData($data);
+}
 
-        $event->setData($data);
     }
 }
