@@ -197,7 +197,6 @@ class Patient extends Assure
 
     /**
      * @ORM\OneToMany(targetEntity=MembreFamille::class, mappedBy="patient")
-     *@Groups({"assures_read","patient_read"})
      */
     private $membresFamille;
 

@@ -40,7 +40,7 @@ class MembreFamilleRepository extends ServiceEntityRepository
     }
 
 
-    public function findByExampleField($value): array
+    public function getFamille($value): array
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.assure = :val')

@@ -11,7 +11,6 @@ use App\Entity\Gerant;
 use App\Entity\Infirmier;
 use App\Entity\Medecin;
 use App\Entity\Media;
-use App\Entity\Medicament;
 use App\Entity\PageCarnetSante;
 use App\Entity\Patient;
 use App\Entity\Pharmacien;
@@ -22,7 +21,6 @@ use App\Repository\AssuranceRepository;
 use App\Repository\AssureRepository;
 use App\Repository\FactureRepository;
 use App\Repository\FichierMedicalRepository;
-use App\Repository\GerantRepository;
 use App\Repository\MedecinRepository;
 use App\Repository\MediaRepository;
 use App\Repository\MedicamentRepository;
@@ -67,7 +65,7 @@ class DefaultController
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Affection"){
             $entity = $affectionRepository->find($request->attributes->get('id'));
 
-            $etat = $entity->isValue();
+            $etat = $entity->getValue();
 
             dd($etat);
 
@@ -785,8 +783,7 @@ class DefaultController
     ,TypeMedecinRepository $typeMedecinRepository,TypeServiceRepository $typeServiceRepository,PageCarnetSanteRepository $pageCarnetSanteRepository
     )
 {
-
-    $response = new Response();
+       $response = new Response();
 
         $arrayFacture = array();
         foreach ($factureRepository->findAll() as $patient){
@@ -942,8 +939,8 @@ class DefaultController
              'pageCarnets' => $arrayPageCarnet,
              'fichierFichierMedicaments' => $arrayFichierMedical,
              'medecins' => $arrayMedecin,
-             'factures' => $arrayFacture,*/
-             'familles' => $arrayFamille
+             'factures' => $arrayFacture,
+             'familles' => $arrayFamille*/
         ]));
 
         $response->headers->set('Content-Type', 'application/json');
@@ -958,18 +955,17 @@ class DefaultController
     }
 
 
-
     /**
      * @Route("/cemedo/membre_famille", name="all_objects", methods={"post","get"})
-     * @param MembreFamilleRepository $membreFamilleRepository
+     * @param Security $security
      * @return Response
      */
-    public function getALlFamille(
+    public function getAllFamille(
         MembreFamilleRepository $membreFamilleRepository,Security $security
     )
     {
-        $this->getUser();
-dd($security->getUser());
+
+///dd($security);
         $response = new Response();
 
         $arrayFamille = array();
@@ -982,7 +978,6 @@ dd($security->getUser());
                 'tel2'=>$patient->getTel2(),
             );
         }
-
 
         $response->setContent(json_encode([
             'status' => 200,

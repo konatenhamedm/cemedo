@@ -63,6 +63,14 @@ class AssureRepository extends ServiceEntityRepository implements PasswordUpgrad
             ->getQuery()
             ->getResult();
     }
+
+    public  function  findOneByUsername($value){
+        return $this->createQueryBuilder("d")
+            ->andWhere('d.tel=:value')
+            ->setParameter('value',$value)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Assure[] Returns an array of Assure objects
 //     */

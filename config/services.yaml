@@ -38,6 +38,13 @@ services:
         tags:
            - {name: kernel.event_listener,event: lexik_jwt_authentication.on_jwt_created ,
            method: updateJwtData ,}
+    App\Events\JwtSubscriberDecode:
+        tags:
+            - {name: kernel.event_listener,event: lexik_jwt_authentication.on_jwt_decoded ,
+               method: onJWTDecoded ,}
+    App\Events\AuthenticationSuccessListener:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
     App\Controller\:
         resource: '../src/Controller'
         tags: [controller.service_arguments]

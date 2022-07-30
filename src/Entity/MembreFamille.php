@@ -10,7 +10,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={
+ *      "groups"= {"famille_read"}
+ *          },
+ *     denormalizationContext={"disable_type_enforcement"=true}
+ * )
  * @ORM\Entity(repositoryClass=MembreFamilleRepository::class)
  */
 class MembreFamille extends Assure
@@ -20,7 +25,7 @@ class MembreFamille extends Assure
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","famille_read"})
      */
     private $id;
 
