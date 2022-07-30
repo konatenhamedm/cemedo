@@ -41,14 +41,14 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     *  @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $roles = [];
 
@@ -60,18 +60,18 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $prenoms;
 
     /**
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      * @ORM\ManyToOne(targetEntity=Assurance::class, inversedBy="assures")
      */
     private $assurance;
@@ -90,68 +90,68 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=12,  unique=true)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      * @Assert\NotBlank(message="Nous avons besoin de votre numéro de telephone")
      */
     private $tel;
 
     /**
      * @ORM\Column(type="string", length=12, nullable=true)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $tel2;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $sexe;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $fcmtoken;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $tauxCouverture;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $autreAntecedent;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $numeroAssure;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $lieuHabitation;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $dateNaissance;
 
     /**
      * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="assure")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $adresses;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"assures_read"})
+     * @Groups({"assures_read","patient_read"})
      */
     private $createdAt;
 
