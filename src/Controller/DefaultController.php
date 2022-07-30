@@ -111,8 +111,8 @@ class DefaultController
                 $entity->setTel($request->request->get("tel"));
             if ($request->request->get("tel2"))
                 $entity->setTel2($request->request->get("tel2"));
-            if (is_null($request->request->get("password"))){
-                $entity->setPassword($entity->getPassword());
+            if ($request->request->get("password") === null){
+                return "";
             }else{
                 $entity->setPassword($this->encoder->hashPassword(new Assure(), $request->request->get("password")));
             }
@@ -947,45 +947,5 @@ class DefaultController
 
         return $response;
     }
-    /*
-     * @Route("cemedo/medias/{id}/update",name="get_media", methods={"get"})
-     */
-    public function getMedia($id,Media $media){
-        dd($media);
-    }
 
-
-    /**
-     * @Route("/cemedo/membre_famille", name="all_objects", methods={"post","get"})
-     * @param Security $security
-     * @return Response
-     */
-    public function getAllFamille(
-        MembreFamilleRepository $membreFamilleRepository,Security $security
-    )
-    {
-
-///dd($security);
-        $response = new Response();
-
-        $arrayFamille = array();
-        foreach ($membreFamilleRepository->findByExampleField($this->security->getUser()) as $patient){
-            $arrayFamille [] = array(
-                'id'=>$patient->getId(),
-                'nom'=>$patient->getNom(),
-                'prenom'=>$patient->getPrenoms(),
-                'tel'=>$patient->getTel(),
-                'tel2'=>$patient->getTel2(),
-            );
-        }
-
-        $response->setContent(json_encode([
-            'status' => 200,
-            'familles' => $arrayFamille
-        ]));
-
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
-    }
 }
