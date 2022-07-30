@@ -72,11 +72,13 @@ class Assurance
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read","assurance_read"})
      */
     private $ville;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"assures_read","assurance_read"})
      */
     private $contact;
 
