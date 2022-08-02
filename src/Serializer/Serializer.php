@@ -3,6 +3,7 @@
 namespace App\Serializer;
 
 use App\Entity\Media;
+use App\Entity\MembreFamille;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -21,7 +22,7 @@ final class Serializer implements ContextAwareNormalizerInterface, NormalizerAwa
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool {
-        return !isset($context[self::ALREADY_CALLED]) && $data instanceof Patient;
+        return !isset($context[self::ALREADY_CALLED]) && ($data instanceof Patient || $data instanceof MembreFamille);
     }
 
     public function normalize($object, ?string $format = null, array $context = []) {

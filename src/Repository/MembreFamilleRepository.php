@@ -49,6 +49,13 @@ class MembreFamilleRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    public function getLastMembre(){
+        return $this->createQueryBuilder("d")
+            ->select("max(d.id) as id")
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
 //    /**
 //     * @return MembreFamille[] Returns an array of MembreFamille objects

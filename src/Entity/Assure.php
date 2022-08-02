@@ -9,13 +9,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * @Vich\Uploadable()
  * @ORM\Entity(repositoryClass=AssureRepository::class)
  * @ApiResource(
  *      normalizationContext={
@@ -40,15 +43,192 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="pieceIdRecto")
+     * @Groups({"write"})
+     */
+    private $file ;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="pieceIdVerso")
+     * @Groups({"write"})
+     */
+    private $filePieceVerso ;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="assuranceRecto")
+     * @Groups({"write"})
+     */
+    private $fileAssuranceRecto ;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="fichiers",fileNameProperty="assuranceVerso")
+     * @Groups({"write"})
+     */
+    private $fileAssuranceVerso ;
+
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getFilePieceVerso(): ?File
+    {
+        return $this->filePieceVerso;
+    }
+    /**
+     * @return File|null
+     */
+    public function getFileAssuranceRecto(): ?File
+    {
+        return $this->fileAssuranceRecto;
+    }
+    /**
+     * @return File|null
+     */
+    public function getFileAssuranceVerso(): ?File
+    {
+        return $this->fileAssuranceVerso;
+    }
+
+    /**
+     * @param File|null $file
+     *
+     */
+    public function setFile(?File $file)
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @param File|null $file
+     *
+     */
+    public function setFilePieceVerso(?File $file)
+    {
+        $this->filePieceVerso = $file;
+        return $this;
+    }
+
+    /**
+     * @param File|null $file
+     *
+     */
+    public function setFileAssuranceRecto(?File $file)
+    {
+        $this->fileAssuranceRecto = $file;
+        return $this;
+    }
+
+    /**
+     * @param File|null $file
+     *
+     */
+    public function setFileAssuranceVerso(?File $file)
+    {
+        $this->fileAssuranceVerso = $file;
+        return $this;
+    }
+
+
+    /**
+     *
+     * @Groups({"assures_read","familles_read"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"assures_read","patient_read","famille_read"})
+     */
+    private $pieceIdRecto;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"assures_read","patient_read","famille_read"})
+     */
+    private $pieceIdVerso;
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"assures_read","patient_read","famille_read"})
+     */
+    private $assuranceRecto;
+
+
+
+    public function getPieceIdRecto(): ?string
+    {
+        return $this->pieceIdRecto;
+    }
+
+    public function setPieceIdRecto(?string $pieceIdRecto): self
+    {
+        $this->pieceIdRecto = $pieceIdRecto;
+
+        return $this;
+    }
+
+    public function getPieceIdVerso(): ?string
+    {
+        return $this->pieceIdVerso;
+    }
+
+    public function setPieceIdVerso(?string $pieceIdVerso): self
+    {
+        $this->pieceIdVerso = $pieceIdVerso;
+
+        return $this;
+    }
+
+    public function getAssuranceRecto(): ?string
+    {
+        return $this->assuranceRecto;
+    }
+
+    public function setAssuranceRecto(?string $assuranceRecto): self
+    {
+        $this->assuranceRecto = $assuranceRecto;
+
+        return $this;
+    }
+
+    public function getAssuranceVerso(): ?string
+    {
+        return $this->assuranceVerso;
+    }
+
+    public function setAssuranceVerso(?string $assuranceVerso): self
+    {
+        $this->assuranceVerso = $assuranceVerso;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
      * @Groups({"assures_read","patient_read"})
+     */
+    private $assuranceVerso;
+
+
+    /**
+     * @ORM\Column(type="string", length=180)
+     *  @Groups({"assures_read","patient_read","famille_read"})
      * @Assert\Email(message="Nous avons besoin de votre email")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $roles = [];
 
@@ -60,18 +240,18 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read","patient_read"})
+     * @Groups({"assures_read","patient_read","famille_read"})
      */
     private $prenoms;
 
     /**
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      * @ORM\ManyToOne(targetEntity=Assurance::class, inversedBy="assures")
      */
     private $assurance;
@@ -90,86 +270,86 @@ class Assure implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=12,  unique=true)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      * @Assert\NotBlank(message="Nous avons besoin de votre numéro de telephone")
      */
     private $tel;
 
     /**
      * @ORM\Column(type="string", length=12, nullable=true)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $tel2;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $sexe;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $fcmtoken;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"assures_read","patient_read"})
+     * @Groups({"assures_read","patient_read","famille_read"})
      */
     private $tauxCouverture;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $autreAntecedent;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $numeroAssure;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"assures_read","patient_read"})
+     * @Groups({"assures_read","patient_read","famille_read"})
      */
     private $lieuHabitation;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $dateNaissance;
 
     /**
      * @ORM\OneToMany(targetEntity=Adresse::class, mappedBy="assure")
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $adresses;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"assures_read","patient_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime",nullable=true)
-     * @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"assures_read"})
+     *  @Groups({"assures_read","patient_read","famille_read"})
      */
     private $active;
 

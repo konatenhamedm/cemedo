@@ -11,6 +11,7 @@ use App\Entity\Gerant;
 use App\Entity\Infirmier;
 use App\Entity\Medecin;
 use App\Entity\Media;
+use App\Entity\MembreFamille;
 use App\Entity\PageCarnetSante;
 use App\Entity\Patient;
 use App\Entity\Pharmacien;
@@ -40,6 +41,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class DefaultController
 {
@@ -59,7 +62,7 @@ class DefaultController
 
     }
 
-    public function __invoke(AffectionRepository $affectionRepository,MediaRepository $mediaRepository,UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,Request $request, FileUploader $fileUploader)
+    public function __invoke(AffectionRepository $affectionRepository,MediaRepository $mediaRepository,UserRepository $repository,PageCarnetSanteRepository $pageCarnetSanteRepository,PatientRepository $patientRepository,MembreFamilleRepository $membreFamilleRepository,Request $request, FileUploader $fileUploader)
     {
        // dd();
         if ($request->attributes->get('_api_resource_class') === "App\Entity\Affection"){
@@ -90,8 +93,14 @@ class DefaultController
            /* if ($request->request->get("titre"))
                 $entity->setTitre($request->request->get("titre"));*/
         }
-        elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
-            $entity = $patientRepository->find($request->attributes->get('id'));
+        elseif  ($request->attributes->get('_api_resource_class') === "App\Entity\Patient" ||
+            $request->attributes->get('_api_resource_class') === "App\Entity\MembreFamille"){
+            if ( $request->attributes->get('_api_resource_class') === "App\Entity\Patient"){
+                $entity = $patientRepository->find($request->attributes->get('id'));
+            }else{
+                $entity = $membreFamilleRepository->find($request->attributes->get('id'));
+            }
+
 
             $pieceIdRecto = $request->files->get('pieceIdRecto');
             $pieceIdVerso = $request->files->get('pieceIdVerso');
@@ -143,6 +152,11 @@ class DefaultController
                 $entity->setLieuHabitation($request->request->get("lieuHabitation"));
             if ($request->request->get("profession"))
                 $entity->setProfession($request->request->get("profession"));
+
+            if ($request->attributes->get('_api_resource_class') === "App\Entity\MembreFamille"){
+                if ($request->request->get("relation"))
+                    $entity->setRelation($request->request->get("relation"));
+            }
         }elseif ($request->attributes->get('_api_resource_class') === "App\Entity\PageCarnetSante"){
             $entity = $pageCarnetSanteRepository->find($request->attributes->get('id'));
             $lieFichier = $request->files->get('lieFichier');
@@ -211,12 +225,18 @@ class DefaultController
     /**
      * @Route("/cemedo/patients", name="test", methods={"post"})
      * @param Request $request
+     * @param JWTTokenManagerInterface $JWTManager
+     * @param AssureRepository $repository
      * @param FileUploader $fileUploader
      * @param EntityManagerInterface $entityManager
+     * @param PatientRepository $patientRepository
      * @return Response
      */
-    public function newPatient(Request $request,AssureRepository $repository, FileUploader $fileUploader, EntityManagerInterface $entityManager,PatientRepository $patientRepository)
+    public function newPatient(Request $request,JWTTokenManagerInterface $JWTManager,
+                               AssureRepository $repository, FileUploader $fileUploader, EntityManagerInterface $entityManager,PatientRepository $patientRepository)
     {
+
+
         $response = new Response();
         $pieceIdRecto = $request->files->get('pieceIdRecto');
         $pieceIdVerso = $request->files->get('pieceIdVerso');
@@ -331,10 +351,153 @@ class DefaultController
             $entityManager->persist($affection);
             $entityManager->flush();
         }
-
+      //  dd($JWTManager->create($repository->getPatient($patientRepository->getLastPatient())));
         $response->setContent(json_encode([
             'status' => 200,
             'data' => $repository->getPatient($patientRepository->getLastPatient())
+        ]));
+
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
+    }
+
+
+    /**
+     * @Route("/cemedo/patients", name="test", methods={"post"})
+     * @param Request $request
+     * @param JWTTokenManagerInterface $JWTManager
+     * @param AssureRepository $repository
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $entityManager
+     * @param MembreFamilleRepository $membreFamilleRepository
+     * @return Response
+     */
+    public function newMembre(Request $request,JWTTokenManagerInterface $JWTManager,
+                               AssureRepository $repository, FileUploader $fileUploader, EntityManagerInterface $entityManager,MembreFamilleRepository $membreFamilleRepository)
+    {
+
+
+        $response = new Response();
+        $pieceIdRecto = $request->files->get('pieceIdRecto');
+        $pieceIdVerso = $request->files->get('pieceIdVerso');
+        $assuranceRecto = $request->files->get('assuranceRecto');
+        $assuranceVerso = $request->files->get('assuranceVerso');
+
+        //file = new File('1-62d02b59c31f1.png');
+
+
+        $entity = new MembreFamille();
+
+        $affections = [
+            [
+                "key"=>"asthme",
+                "libelle"=>"Faites-vous de l'asthme ?",
+            ],
+            [
+                "key"=>"drepanocytose",
+                "libelle"=>"Etes-vous drépanocytaire ?",
+            ],
+            [
+                "key"=>"diabete",
+                "libelle"=>"Avez-vous la diabète ?",
+            ],
+            [
+                "key"=>"ulcere",
+                "libelle"=>"Etes-vous ulcérieux(se) ?",
+            ],
+            [
+                "key"=>"vih",
+                "libelle"=>"Avez-vous le VIH/SIDA ?",
+            ],
+            [
+                "key"=>"hepatite",
+                "libelle"=>"Avez-vous de l'hépatie ?",
+            ],
+            [
+                "key"=>"insCardiaque",
+                "libelle"=>"Avez-vous une insuffisance cardiaque ?",
+            ],
+            [
+                "key"=>"insRenal",
+                "libelle"=>"Avez-vous une insuffisance rénale ?",
+            ],
+            [
+                "key"=>"tension",
+                "libelle"=>"Etes-vous sujet à des tensions artérielles haute ou base ?",
+            ],
+            [
+                "key"=>"allergies",
+                "libelle"=>"Etes-vous sujet à des allergies médicamenteuses et/ou alimentaire ?",
+            ],
+            [
+                "key"=>"articulation",
+                "libelle"=>"Avez-vous une maladie liée aux articulations ?",
+            ],
+            [
+                "key"=>"cardiaque",
+                "libelle"=>"Avez-vous une maladie cardiaque ?",
+            ]
+
+        ];
+
+        $hash = $this->encoder->hashPassword(new Assure(), $request->request->get("password"));
+
+        if ($pieceIdRecto)
+            $entity->setFile($pieceIdRecto);
+        if ($pieceIdVerso)
+            $entity->setFilePieceVerso($pieceIdVerso);
+        if ($assuranceRecto)
+            $entity->setFileAssuranceRecto($assuranceRecto);
+        if ($assuranceVerso)
+            $entity->setFileAssuranceVerso($assuranceVerso);
+
+        if ($request->request->get("tel"))
+            $entity->setTel($request->request->get("tel"));
+        $entity->setTel2($request->request->get("tel2"));
+        $entity->setPassword($hash);
+        $entity->setNom($request->request->get("nom"));
+        $entity->setAssurance($this->repo->find($request->request->get("assurance")));
+        $entity->setPrenoms($request->request->get("prenoms"));
+        $entity->setEmail($request->request->get("email"));
+        $entity->setDateNaissance(\DateTime::createFromFormat('Y-m-d', $request->request->get("dateNaissance")));
+        $entity->setSexe($request->request->get("sexe"));
+        $entity->setFcmtoken($request->request->get("fcmtoken"));
+        $entity->setTauxCouverture(floatval($request->request->get("tauxCouverture")));
+        $entity->setAutreAntecedent($request->request->get("autreAntecedent"));
+        $entity->setNumeroAssure($request->request->get("numeroAssure"));
+        $entity->setLieuHabitation($request->request->get("lieuHabitation"));
+        $entity->setProfession($request->request->get("profession"));
+        $entity->setRelation($request->request->get("relation"));
+        $entity->setRoles(array("ROLE_PATIENT"));
+        if ($request->request->get("assurance"))
+            $entity->setAssurance($this->repo->find($request->request->get("assurance")));
+
+        $entity->setCreatedAt(new \DateTime('now'));
+        $entity->setActive(true);
+        $entity->setVersion(0);
+        $entityManager->persist($entity);
+        $entityManager->flush();
+
+        foreach ($affections as $aft){
+            $affection = new Affection();
+            $affection->setAssure($entity)
+                ->setLibelle($aft['libelle'])
+                ->setCle($aft['key'])
+                ->setValue(0)
+                ->setUpdatedAt(new \DateTime('now'))
+                ->setCreatedAt(new \DateTime('now'))
+                ->setActive(true)
+                ->setVersion(0);
+
+            $entityManager->persist($affection);
+            $entityManager->flush();
+        }
+        //  dd($JWTManager->create($repository->getPatient($patientRepository->getLastPatient())));
+        $response->setContent(json_encode([
+            'status' => 200,
+            'data' => $repository->getMembre($membreFamilleRepository->getLastMembre())
         ]));
 
         $response->headers->set('Content-Type', 'application/json');
